@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imageNen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/mask_group" />
+
+    <ImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="128dp"
+        android:layout_height="138dp"
+        android:layout_alignStart="@id/imageNen"
+        android:layout_alignTop="@id/imageNen"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="34dp"
+        app:srcCompat="@drawable/icondn" />
+
+    <TextView
+        android:id="@+id/txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/imageIcon"
+        android:layout_alignBottom="@id/imageIcon"
+        android:layout_marginStart="-119dp"
+        android:layout_marginBottom="-44dp"
+        android:textColor="@color/black"
+        android:text="User name"
+        android:textStyle="italic" />
+
+
+    <EditText
+        android:id="@+id/UserName"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/txtUserName"
+        android:layout_alignBottom="@id/txtUserName"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="-49dp"
+        android:background="#D6D4D4"
+        android:padding="4dp"
+        android:hint="AsggtUght"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/txtHoTen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/editTextPass"
+        android:layout_alignBottom="@id/UserName"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="-113dp"
+        android:text="Họ và tên"
+        android:textColor="@color/black"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/HoTen"
+        android:layout_width="329dp"
+        android:layout_height="34dp"
+        android:layout_alignStart="@id/txtHoTen"
+        android:layout_alignBottom="@id/txtHoTen"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-44dp"
+        android:background="#D6D4D4"
+        android:hint="Nguyễn Văn A"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/txtPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/UserName"
+        android:layout_alignBottom="@id/UserName"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-31dp"
+        android:textColor="@color/black"
+        android:text="Password" />
+
+    <EditText
+        android:id="@+id/editTextPass"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/txtPass"
+        android:layout_alignBottom="@id/txtPass"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-54dp"
+        android:background="#D6D4D4"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/textSdt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/HoTen"
+        android:layout_alignBottom="@id/HoTen"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-37dp"
+        android:textColor="@color/black"
+        android:text="Số điện thoại"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextSdt"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/textSdt"
+        android:layout_alignBottom="@id/textSdt"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="-54dp"
+        android:background="#D6D4D4"
+        android:ems="10"
+        android:inputType="phone" />
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/editTextSdt"
+        android:layout_alignBottom="@id/editTextSdt"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="-33dp"
+        android:textColor="@color/black"
+        android:text="Email" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/txtEmail"
+        android:layout_alignBottom="@id/txtEmail"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="-53dp"
+        android:background="#D6D4D4"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/txtGioiTinh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/editTextEmail"
+        android:layout_alignBottom="@id/editTextEmail"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="-40dp"
+        android:text="Giới tính"
+        android:textColor="@color/black"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/txtNgaySinh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/txtGioiTinh"
+        android:layout_alignBottom="@id/txtGioiTinh"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-74dp"
+        android:text="Ngày sinh"
+        android:textColor="@color/black"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/txtNgaySinh"
+        android:layout_alignBottom="@id/txtNgaySinh"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="-64dp"
+        android:background="#D6D4D4"
+        android:ems="10"
+        android:inputType="date" />
+
+    <RadioGroup
+        android:id="@+id/genderRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/txtGioiTinh"
+        android:layout_alignBottom="@id/txtNgaySinh"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radioBtNam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="73dp"
+            android:layout_marginBottom="27dp"
+            android:text="Nam" />
+        <RadioButton
+            android:id="@+id/radioBtNu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="83dp"
+            android:layout_marginBottom="26dp"
+            android:text="Nữ" />
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/btDangKi"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@id/editTextDate"
+        android:layout_alignBottom="@id/editTextDate"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="-57dp"
+        android:background="@drawable/round_button"
+        android:text="Đăng kí" />
+
+    <TextView
+        android:id="@+id/txtCoTK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/btDangKi"
+        android:layout_alignBottom="@id/btDangKi"
+        android:layout_marginStart="59dp"
+        android:layout_marginBottom="-40dp"
+        android:text="Bạn đã có tài khoản?"
+        android:textColor="@color/black"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/txtDangNhap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/btDangKi"
+        android:layout_alignBottom="@id/btDangKi"
+        android:layout_marginStart="198dp"
+        android:layout_marginBottom="-38dp"
+        android:text="Đăng nhập"
+        android:textColor="#3cb721"
+        android:textStyle="italic" />
+
+</RelativeLayout>
+</ScrollView>
