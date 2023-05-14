@@ -50,7 +50,7 @@
         android:layout_alignBottom="@id/txtUserName"
         android:layout_marginStart="1dp"
         android:layout_marginBottom="-49dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:padding="4dp"
         android:hint="AsggtUght"
         android:textStyle="italic" />
@@ -75,7 +75,7 @@
         android:layout_alignBottom="@id/txtHoTen"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="-44dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:hint="Nguyễn Văn A"
         android:textStyle="italic" />
 
@@ -98,7 +98,7 @@
         android:layout_alignBottom="@id/txtPass"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="-54dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
         android:inputType="textPassword" />
 
@@ -122,7 +122,7 @@
         android:layout_alignBottom="@id/textSdt"
         android:layout_marginStart="1dp"
         android:layout_marginBottom="-54dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
         android:inputType="phone" />
 
@@ -145,7 +145,7 @@
         android:layout_alignBottom="@id/txtEmail"
         android:layout_marginStart="2dp"
         android:layout_marginBottom="-53dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
         android:inputType="textEmailAddress" />
 
@@ -181,12 +181,13 @@
         android:layout_alignBottom="@id/txtNgaySinh"
         android:layout_marginStart="2dp"
         android:layout_marginBottom="-64dp"
-        android:background="#D6D4D4"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
-        android:inputType="date" />
+        android:inputType="date"
+        android:focusableInTouchMode="false"/>
 
     <RadioGroup
-        android:id="@+id/genderRadioGroup"
+        android:id="@+id/genderRadio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/txtGioiTinh"
