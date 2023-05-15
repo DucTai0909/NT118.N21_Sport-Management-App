@@ -158,7 +158,11 @@ public class Register extends AppCompatActivity {
                     progressDialog.setMessage("Please wait...");
                     progressDialog.setCancelable(true); // Cho phép hủy
                     progressDialog.show();
-                    checkDuplicateDataAndRegister(uName, uPhone, uGender, uUserName,uBirthday_date, uEmail);
+                    fAuth.createUserWithEmailAndPassword(uEmail,uPass).addOnCompleteListener(task -> {
+                       if(task.isSuccessful()){
+                           checkDuplicateDataAndRegister(uName, uPhone, uGender, uUserName,uBirthday_date, uEmail, uPass);
+                       }
+                    });
 
                 }
 
@@ -166,7 +170,7 @@ public class Register extends AppCompatActivity {
 
     }
     private void checkDuplicateDataAndRegister(String uName, String uPhone, String uGender,
-                                               String uUserName, Date uBirthday_date, String uEmail) {
+                                               String uUserName, Date uBirthday_date, String uEmail, String uPass) {
         // Kiểm tra trùng lặp số điện thoại
         db.collection("User")
                 .whereEqualTo("phoneNumber", uPhone)
@@ -191,7 +195,7 @@ public class Register extends AppCompatActivity {
                                             } else {
                                                 // Tạo người dùng mới và lưu vào Firestore
                                                 String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                User newUser = new User(uName, uPhone, uGender, uUserName, uBirthday_date, uEmail);
+                                                User newUser = new User(uName, uPhone, uGender, uUserName, uBirthday_date, uEmail, uPass);
                                                 db.collection("User").document(userID).set(newUser)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override

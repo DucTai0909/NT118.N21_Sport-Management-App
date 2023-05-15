@@ -5,25 +5,43 @@ import java.text.SimpleDateFormat;
 
 
 public class User {
-    String id, name, phoneNumber, gender, userName, email;
+    String id, name, phoneNumber, gender, userName, email, photo, password;
     Date birthdate;
+    public User(){}
 
-    public User(String id, String name, String phoneNumber, String gender, String userName, Date birthdate) {
+    public User(String id, String name, String phoneNumber, String gender, String userName,
+                String email, String photo, String password, Date birthdate) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.userName = userName;
+        this.email = email;
+        this.photo = photo;
+        this.password = password;
         this.birthdate = birthdate;
     }
 
-    public User(String name, String phoneNumber, String gender, String userName, Date birthdate, String email) {
+    public User(String name, String phoneNumber, String gender, String userName, Date birthdate,
+                String email, String password) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.userName = userName;
         this.birthdate = birthdate;
         this.email = email;
+        this.password = password;
+    }
+
+    public User(String name, String phoneNumber, String gender, String userName, String email,
+                String photo, Date birthdate) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.userName = userName;
+        this.email = email;
+        this.photo = photo;
+        this.birthdate = birthdate;
     }
 
     public String getId() {
@@ -77,5 +95,9 @@ public class User {
     public String getEmail(){return this.email;}
 
     public void setEmail(String email){this.email = email;}
+
+    public String getPhoto(){return this.photo;}
+
+    public void setPhoto(String photo){this.photo = photo;}
 
 }
