@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        startActivity(new Intent(this, Welcome.class));
-        finish();
-        //hiding the title bar
+//        startActivity(new Intent(this, Welcome.class));
+//        finish();
+        setContentView(R.layout.layout_userinfo);
     }
 }
