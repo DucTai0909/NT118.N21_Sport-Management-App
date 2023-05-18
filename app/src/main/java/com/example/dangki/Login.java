@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dangki.KhachHang.DatSan;
 import com.example.dangki.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -101,7 +102,7 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),Dangnhapthanhcong.class));
+                                startActivity(new Intent(getApplicationContext(),DatSan.class));
                                 finish();
                             }else{
                                 Toast.makeText(Login.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
@@ -140,14 +141,20 @@ public class Login extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN){
-            Task<GoogleSignInAccount>task =GoogleSignIn.getSignedInAccountFromIntent(data);
+        if(requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(Login.this, "Bạn chưa chọn tài khoản", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                GoogleSignInAccount account =task.getResult(ApiException.class);
+                GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
                 throw new RuntimeException(e);
             }
+
         }
     }
 
@@ -189,7 +196,8 @@ public class Login extends AppCompatActivity {
                     if (document.exists()) {
                         // Người dùng đã tồn tại trong Firestore
                         // Thực hiện các hành động cần thiết sau khi đăng nhập bằng Google
-                        startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                        Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), DatSan.class));
                         finish();
                     } else {
                         // Người dùng chưa tồn tại trong Firestore
@@ -202,7 +210,8 @@ public class Login extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         // Thực hiện các hành động cần thiết sau khi thêm người dùng mới vào Firestore
-                                        startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                                        Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), DatSan.class));
                                         finish();
                                     }
                                 })
@@ -219,5 +228,6 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
 
 }

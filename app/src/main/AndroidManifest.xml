@@ -31,6 +31,13 @@
             android:name=".Login"></activity>
         <activity
             android:name=".Dangnhapthanhcong"></activity>
+        <activity
+            android:name=".Welcome"></activity>
+        <activity android:name=".KhachHang.DatSan"></activity>
+        <activity android:name=".KhachHang.ChiTietSan"></activity>
+        <activity android:name=".KhachHang.ChonDoUong"></activity>
+        <activity android:name=".KhachHang.ChiTietDoUong"></activity>
+        <activity android:name=".KhachHang.ThongTinDatLich"></activity>
     </application>
 
 </manifest>

@@ -12,8 +12,8 @@
         android:padding="16dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:id="@+id/left_icon"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_back" />
@@ -47,6 +47,7 @@
         android:layout_marginStart="42dp"
         android:layout_marginTop="290dp"
         android:text="Coca cola 325ml"
+        android:textColor="@color/black"
         android:textSize="20sp"/>
 
     <TextView
@@ -107,6 +108,7 @@
         android:layout_marginStart="42dp"
         android:layout_marginTop="420dp"
         android:text="Thông tin sản phẩm"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
     <TextView
@@ -120,9 +122,11 @@
         android:text="Sản phẩm được làm từ các thành phần chất lượng cao, tạo ra một hương vị
 đặc trưng và hấp dẫn, mang đến cho bạn cảm giác tuyệt vời mỗi khi thưởng thức."
         android:textSize="16sp"
+        android:textColor="@color/black"
         android:textStyle="italic" />
 
     <Button
+        android:id="@+id/btnThemDoUong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_thongtinsp"

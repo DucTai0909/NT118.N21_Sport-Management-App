@@ -391,7 +391,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnDatLich"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tiến hành đặt lịch"

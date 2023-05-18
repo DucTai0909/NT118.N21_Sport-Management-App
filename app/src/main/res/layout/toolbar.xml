@@ -12,8 +12,8 @@
         android:padding="16dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:id="@+id/left_icon"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_back" />
@@ -21,12 +21,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="100dp"
-            android:layout_toEndOf="@id/left_icon"
+            android:layout_centerHorizontal="true"
             android:text="Thông tin sân"
             android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:textStyle="bold"
+            android:textSize="25sp" />
 
     </RelativeLayout>
 
@@ -40,54 +39,63 @@
         android:src="@drawable/sb5n" />
 
     <TextView
+        android:id="@+id/tvTenSan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relative_toolbar"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="42dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="290dp"
         android:text="Sân bóng 5 người"
-        android:textSize="20sp"/>
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="22sp"/>
 
     <TextView
+        android:id="@+id/tvTinhTrang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvTenSan"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="320dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:text="Tình trạng:"
-        android:textSize="15sp" />
+        android:textColor="@color/black"
+        android:textSize="17sp" />
 
     <TextView
+        android:id="@+id/tvTinhTrangThue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvTenSan"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="131dp"
-        android:layout_marginTop="321dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="15dp"
         android:text="Chưa thuê"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:textColor="#239B56"/>
 
     <TextView
+        android:id="@+id/tvChonGio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvTinhTrang"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:text="Chọn giờ:"
-        android:textSize="15sp" />
+        android:textColor="@color/black"
+        android:textSize="17sp" />
 
     <TextView
+        android:id="@+id/tvChonGio_"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvChonGio"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginStart="20dp"
         android:text="19:00-20:00 14/4/2023"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
     <TextView
@@ -102,38 +110,42 @@
         android:textColor="#D35400"/>
 
     <TextView
+        android:id="@+id/tvThongTinSan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvChonGio_"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="420dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:text="Thông tin sân"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_thongtinsan"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@+id/tvThongTinSan"
         android:layout_alignParentStart="true"
         android:layout_marginStart="39dp"
-        android:layout_marginTop="453dp"
         android:text="Sân 5 người với kích thước nhỏ gọn nhưng đầy đủ các tiện nghi để bạn có thể
 thỏa sức chơi bóng. Sân được trang bị đèn chiếu sáng và mặt cỏ nhân tạo tốt nhất, đảm bảo
 an toàn cho người chơi."
         android:textSize="16sp"
+        android:textColor="@color/black"
         android:textStyle="italic" />
 
     <Button
+        android:id="@+id/btnDatSan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_thongtinsan"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="153dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
         android:backgroundTint="#3CB371"
-        android:text="Đặt sân" />
+        android:text="Đặt sân"
+        android:textSize="20dp" />
+
 
 
 </RelativeLayout>
