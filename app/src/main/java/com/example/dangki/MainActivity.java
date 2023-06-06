@@ -19,6 +19,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 //        startActivity(new Intent(this, Welcome.class));
 //        finish();
-        setContentView(R.layout.layout_userinfo);
+        setContentView(R.layout.layout_userinfo_admin);
     }
 }
