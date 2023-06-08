@@ -38,6 +38,7 @@
         <activity android:name=".KhachHang.ChonDoUong"></activity>
         <activity android:name=".KhachHang.ChiTietDoUong"></activity>
         <activity android:name=".KhachHang.ThongTinDatLich"></activity>
+        <activity android:name=".Admin.KhachHang.Menu"></activity>
     </application>
 
 </manifest>

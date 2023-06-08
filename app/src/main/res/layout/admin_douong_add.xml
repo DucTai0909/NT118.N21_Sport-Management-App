@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:id="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_left_arrow"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Thêm Đồ Uống"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="23dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imv_addImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/layout_title"
+            android:src="@drawable/ic_douong"
+            />
+        <TextView
+            android:id="@+id/tv_tendouong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imv_addImage"
+            android:text="Tên đồ uống"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="12dp"/>
+        <EditText
+            android:id="@+id/edt_tendouong"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_tendouong"
+            android:layout_marginLeft="30dp"
+            android:textSize="15dp"/>
+        <TextView
+            android:id="@+id/tv_sl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_tendouong"
+            android:text="Số lượng"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="12dp"/>
+        <EditText
+            android:id="@+id/edt_sl"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_sl"
+            android:layout_marginLeft="30dp"
+            android:textSize="15dp"
+            android:inputType="number"/>
+        <TextView
+            android:id="@+id/tv_gia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_sl"
+            android:text="Mức giá"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="12dp"/>
+        <EditText
+            android:id="@+id/edt_gia"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_gia"
+            android:layout_marginLeft="30dp"
+            android:textSize="15dp"/>
+
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_gia"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:text="Thêm"
+            app:backgroundTint="#50C878" />
+    </RelativeLayout>
+</ScrollView>

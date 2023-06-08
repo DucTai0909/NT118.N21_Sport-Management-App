@@ -6,14 +6,17 @@
 <LinearLayout
     android:id="@+id/ln_admin_khachhang"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_3"
-        android:layout_marginLeft="10dp"/>
+        android:src="@drawable/profile"
+        android:layout_marginLeft="10dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
     <RelativeLayout
         android:id="@+id/rl_admin_khachhang_fullname"
         android:layout_width="wrap_content"

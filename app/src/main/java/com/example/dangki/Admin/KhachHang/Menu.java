@@ -1,30 +1,34 @@
-package com.example.dangki;
+package com.example.dangki.Admin.KhachHang;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.dangki.Admin.KhachHang.Menu;
+import com.example.dangki.Dangnhapthanhcong;
+import com.example.dangki.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class Dangnhapthanhcong  extends AppCompatActivity {
+public class Menu extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dangnhapthanhcong);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getSupportActionBar().hide();
+        setContentView(R.layout.admin_khachhang);
 
         bottomNavigationView = findViewById(R.id.admin_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_admin_datlich);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_admin_khachhang);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
-                case R.id.bottom_admin_datlich:
-                    return true;
                 case R.id.bottom_admin_khachhang:
-                    startActivity(new Intent(getApplicationContext(), Menu.class));
+                    return true;
+                case R.id.bottom_admin_datlich:
+                    startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
                     return true;
             }
             return false;
