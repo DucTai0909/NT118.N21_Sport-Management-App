@@ -16,6 +16,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/btn_admin_douong_goback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_left_arrow"/>
@@ -83,13 +84,15 @@
             android:textSize="18dp"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="12dp"/>
+
         <EditText
             android:id="@+id/edt_gia"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_gia"
             android:layout_marginLeft="30dp"
-            android:textSize="15dp"/>
+            android:singleLine="false"
+            android:textSize="15dp" />
 
 
         <Button

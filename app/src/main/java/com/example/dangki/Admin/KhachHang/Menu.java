@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Menu extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,11 @@ public class Menu extends AppCompatActivity {
                     return true;
                 case R.id.bottom_admin_datlich:
                     startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                    finish();
+                    return true;
+                case R.id.bottom_admin_douong:
+                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.Douong.Menu.class));
+                    finish();
                     return true;
             }
             return false;
