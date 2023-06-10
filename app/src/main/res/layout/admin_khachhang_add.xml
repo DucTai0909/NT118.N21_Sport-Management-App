@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imv_addImage"
+        android:id="@+id/img_chooser"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="25dp"
@@ -43,7 +43,7 @@
         android:id="@+id/tv_hoten"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imv_addImage"
+        android:layout_below="@id/img_chooser"
         android:text="Họ và tên"
         android:textColor="@color/black"
         android:textSize="18dp"

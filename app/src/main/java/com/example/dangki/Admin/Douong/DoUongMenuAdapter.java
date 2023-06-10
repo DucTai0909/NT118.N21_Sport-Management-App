@@ -62,4 +62,7 @@ public class DoUongMenuAdapter extends RecyclerView.Adapter<DoUongMenuAdapter.Do
             Picasso.get().load(doUong.getImg_url()).into(imv_doUong);
         }
     }
+    public List<DoUong> getDoUongList() {
+        return doUongList;
+    }
 }

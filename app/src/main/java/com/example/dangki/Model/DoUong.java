@@ -5,15 +5,26 @@ public class DoUong {
     double price;
     int remain;
 
+    boolean isDelete;
+
     public DoUong() {
     }
 
-    public DoUong(String id, String name, String img_url, double price, int remain) {
+    public DoUong(String id, String name, String img_url, double price, int remain, boolean isDelete) {
         this.id = id;
         this.name = name;
         this.img_url = img_url;
         this.price = price;
         this.remain = remain;
+        this.isDelete =isDelete;
+    }
+
+    public DoUong(String name, String img_url, double price, int remain, boolean isDelete) {
+        this.name = name;
+        this.img_url = img_url;
+        this.price = price;
+        this.remain = remain;
+        this.isDelete = isDelete;
     }
 
     public String getId() {

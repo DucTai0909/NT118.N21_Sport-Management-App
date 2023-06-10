@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +33,11 @@ public class Menu extends AppCompatActivity {
     static final long DOUBLE_BACK_PRESS_DURATION = 2000; // Thời gian giới hạn giữa 2 lần nhấn "Back" (2 giây trong trường hợp này)
     long backPressedTime; // Thời gian người dùng nhấn nút "Back" lần cuối
     BottomNavigationView bottomNavigationView;
+    SearchView searchView;
     RecyclerView recyclerView;
     DoUongMenuAdapter doUongMenuAdapter;
     FloatingActionButton btn_admin_douong_them;
+    List<DoUong> doUongList;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,38 @@ public class Menu extends AppCompatActivity {
             }
         });
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchText) {
+                searchDoUong(searchText);
+                return true;
+            }
+        });
+
     }
+
+    private void searchDoUong(String searchText) {
+        List<DoUong> filteredList = new ArrayList<>();
+        String normalizedSearchText = normalizeString(searchText);
+        for (DoUong doUong : doUongList) {
+            String normalizedName = normalizeString(doUong.getName());
+            if (normalizedName.contains(normalizedSearchText)) {
+                filteredList.add(doUong);
+            }
+        }
+        doUongMenuAdapter.setDoUongList(filteredList);
+    }
+
+    private String normalizeString(String text) {
+        String normalizedText = Normalizer.normalize(text, Normalizer.Form.NFD);
+        return normalizedText.replaceAll("\\p{M}", "").toLowerCase();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -74,7 +109,7 @@ public class Menu extends AppCompatActivity {
         collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DoUong> doUongList = new ArrayList<>();
+                doUongList = new ArrayList<>();
                 for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                     String id = documentSnapshot.getId();
                     String tenDoUong = documentSnapshot.getString("name");
@@ -84,11 +119,11 @@ public class Menu extends AppCompatActivity {
                     double gia = documentSnapshot.getDouble("price");
 
                     if(isDelete == false){
-                        DoUong doUong = new DoUong(id, tenDoUong, img_url, gia, soLuong);
+                        DoUong doUong = new DoUong(id, tenDoUong, img_url, gia, soLuong, false);
                         doUongList.add(doUong);
                     }
-                    doUongMenuAdapter.setDoUongList(doUongList);
                 }
+                doUongMenuAdapter.setDoUongList(doUongList);
             };
         });
     }
@@ -96,6 +131,8 @@ public class Menu extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.admin_navigation);
         btn_admin_douong_them = findViewById(R.id.btn_themDoUong);
         recyclerView = findViewById(R.id.rcv_admin_douong);
+        searchView = findViewById(R.id.search_admin_douong);
+
     }
     void BottomNavigation(){
 
