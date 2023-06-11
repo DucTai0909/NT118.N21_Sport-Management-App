@@ -36,6 +36,10 @@ public class Menu extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.Douong.Menu.class));
                     finish();
                     return true;
+                case R.id.bottom_admin_san:
+                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.San.Menu.class));
+                    finish();
+                    return true;
             }
             return false;
         });

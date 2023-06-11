@@ -43,6 +43,8 @@
         <activity android:name=".Admin.Douong.Menu"/>
         <activity android:name=".Admin.Douong.ThemDoUong"/>
         <activity android:name=".Admin.Douong.CapNhatDoUong"/>
+        <activity android:name=".Admin.San.ThemSan"/>
+        <activity android:name=".Admin.San.CapNhatSan"/>
     </application>
 
 </manifest>

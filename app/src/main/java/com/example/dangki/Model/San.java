@@ -13,12 +13,7 @@ public class San {
         this.isDelete = isDelete;
     }
 
-    public San(String img_url, String name, double price, boolean isDelete) {
-        this.img_url = img_url;
-        this.name = name;
-        this.price = price;
-        this.isDelete = isDelete;
-    }
+
 
     public String getId() {
         return id;

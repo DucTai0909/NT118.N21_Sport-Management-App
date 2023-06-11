@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Đồ uống"
+                android:text="Quản lý Đồ uống"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="23dp" />

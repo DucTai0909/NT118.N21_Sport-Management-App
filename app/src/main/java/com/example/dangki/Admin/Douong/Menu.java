@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dangki.Admin.San.ThemSan;
 import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.Model.DoUong;
 import com.example.dangki.R;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class Menu extends AppCompatActivity {
     static final int REQUEST_CODE_CAPNHAT = 1; // Mã yêu cầu cập nhật
+    static final int REQUEST_CODE_ADD = 2; // Mã yêu cầu cập nhật
     static final long DOUBLE_BACK_PRESS_DURATION = 2000; // Thời gian giới hạn giữa 2 lần nhấn "Back" (2 giây trong trường hợp này)
     long backPressedTime; // Thời gian người dùng nhấn nút "Back" lần cuối
     BottomNavigationView bottomNavigationView;
@@ -57,7 +59,8 @@ public class Menu extends AppCompatActivity {
         btn_admin_douong_them.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ThemDoUong.class));
+                Intent intent = new Intent(getApplicationContext(), ThemSan.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
 
@@ -84,7 +87,6 @@ public class Menu extends AppCompatActivity {
                 intent.putExtra("ten", doUong.getName());
 
                 startActivityForResult(intent, REQUEST_CODE_CAPNHAT);
-
             }
         });
 
@@ -97,7 +99,11 @@ public class Menu extends AppCompatActivity {
         if(requestCode ==  REQUEST_CODE_CAPNHAT && resultCode == 1){
             loadDoUong();
         }
+        // Sự kiện xóa
         if(requestCode == REQUEST_CODE_CAPNHAT && resultCode ==2){
+            loadDoUong();
+        }
+        if(requestCode == REQUEST_CODE_ADD && resultCode ==2){
             loadDoUong();
         }
     }
@@ -189,6 +195,10 @@ public class Menu extends AppCompatActivity {
                     return true;
                 case R.id.bottom_admin_khachhang:
                     startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.KhachHang.Menu.class));
+                    finish();
+                    return true;
+                case R.id.bottom_admin_san:
+                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.San.Menu.class));
                     finish();
                     return true;
             }

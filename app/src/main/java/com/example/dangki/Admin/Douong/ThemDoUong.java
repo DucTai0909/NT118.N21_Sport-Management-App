@@ -37,6 +37,7 @@ import io.grpc.Context;
 
 public class ThemDoUong extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
+    static final int RESULT_ADD_SUCCESS = 2;
     Uri mImageUri;
     ProgressBar progressBar;
     ImageView btn_goback, img_chooser;
@@ -94,13 +95,15 @@ public class ThemDoUong extends AppCompatActivity {
             public void onSuccess(DocumentReference documentReference) {
                 progressBar.setVisibility(View.GONE); // Ẩn ProgressBar
                 Toast.makeText(ThemDoUong.this, "Thêm đồ uống thành công", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_ADD_SUCCESS);
+                finish();
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.GONE); // Ẩn ProgressBar
-                        Toast.makeText(ThemDoUong.this, "Thêm đồ uống thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ThemDoUong.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

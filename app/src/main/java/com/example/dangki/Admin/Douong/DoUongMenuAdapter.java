@@ -54,7 +54,7 @@ public class DoUongMenuAdapter extends RecyclerView.Adapter<DoUongMenuAdapter.Do
         public DoUongMenuViewHolder(@NonNull View itemView) {
             super(itemView);
             imv_doUong = itemView.findViewById(R.id.imv_admim_douong_image);
-            tv_tenDouong = itemView.findViewById(R.id.tv_admin_douong_name);
+            tv_tenDouong = itemView.findViewById(R.id.tv_admin_douong_tendouong);
             tv_gia = itemView.findViewById(R.id.tv_admin_douong_gia);
             tv_sl = itemView.findViewById(R.id.tv_admin_douong_sl);
 
