@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu extends AppCompatActivity {
+    static final int REQUEST_CODE_CAPNHAT = 1; // Mã yêu cầu cập nhật
     static final long DOUBLE_BACK_PRESS_DURATION = 2000; // Thời gian giới hạn giữa 2 lần nhấn "Back" (2 giây trong trường hợp này)
     long backPressedTime; // Thời gian người dùng nhấn nút "Back" lần cuối
     BottomNavigationView bottomNavigationView;
@@ -73,8 +74,37 @@ public class Menu extends AppCompatActivity {
             }
         });
 
+        doUongMenuAdapter.setOnItemClickListener(new DoUongMenuAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DoUong doUong) {
+                Intent intent = new Intent(Menu.this, CapNhatDoUong.class);
+                intent.putExtra("Id", doUong.getId());
+                intent.putExtra("sl", doUong.getRemain());
+                intent.putExtra("gia", doUong.getPrice());
+                intent.putExtra("ten", doUong.getName());
+
+                startActivityForResult(intent, REQUEST_CODE_CAPNHAT);
+
+            }
+        });
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode ==  REQUEST_CODE_CAPNHAT && resultCode == 1){
+            loadDoUong();
+        }
+        if(requestCode == REQUEST_CODE_CAPNHAT && resultCode ==2){
+            loadDoUong();
+        }
+    }
+
+    /*
+    Search đồ uống
+     */
     private void searchDoUong(String searchText) {
         List<DoUong> filteredList = new ArrayList<>();
         String normalizedSearchText = normalizeString(searchText);
@@ -86,13 +116,14 @@ public class Menu extends AppCompatActivity {
         }
         doUongMenuAdapter.setDoUongList(filteredList);
     }
-
     private String normalizeString(String text) {
         String normalizedText = Normalizer.normalize(text, Normalizer.Form.NFD);
         return normalizedText.replaceAll("\\p{M}", "").toLowerCase();
     }
 
-
+    /*
+    Sự kiện thoát ứng dụng
+     */
     @Override
     public void onBackPressed() {
         if(backPressedTime + DOUBLE_BACK_PRESS_DURATION > System.currentTimeMillis()){
@@ -103,6 +134,9 @@ public class Menu extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis(); // Cập nhật thời gian người dùng nhấn nút "Back" lần cuối
     }
 
+    /*
+    Load đồ uống từ Firestore lên View
+     */
     void loadDoUong(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("Drink");
@@ -127,6 +161,10 @@ public class Menu extends AppCompatActivity {
             };
         });
     }
+
+    /*
+    Find View By Id
+     */
     void findViewByIds(){
         bottomNavigationView = findViewById(R.id.admin_navigation);
         btn_admin_douong_them = findViewById(R.id.btn_themDoUong);
@@ -134,6 +172,10 @@ public class Menu extends AppCompatActivity {
         searchView = findViewById(R.id.search_admin_douong);
 
     }
+
+    /*
+    Xử lý BottomNavigation
+     */
     void BottomNavigation(){
 
         bottomNavigationView.setSelectedItemId(R.id.bottom_admin_douong);

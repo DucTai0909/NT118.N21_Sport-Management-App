@@ -17,9 +17,14 @@ import java.util.List;
 
 public class DoUongMenuAdapter extends RecyclerView.Adapter<DoUongMenuAdapter.DoUongMenuViewHolder> {
     List<DoUong> doUongList;
+    private OnItemClickListener listener;
+
 
     public DoUongMenuAdapter(List<DoUong> doUongList){
         this.doUongList = doUongList;
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
     @NonNull
     @Override
@@ -52,6 +57,16 @@ public class DoUongMenuAdapter extends RecyclerView.Adapter<DoUongMenuAdapter.Do
             tv_tenDouong = itemView.findViewById(R.id.tv_admin_douong_name);
             tv_gia = itemView.findViewById(R.id.tv_admin_douong_gia);
             tv_sl = itemView.findViewById(R.id.tv_admin_douong_sl);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && listener != null){
+                        listener.onItemClick(doUongList.get(position));
+                    }
+                }
+            });
         }
 
         public void bind(DoUong doUong){
@@ -64,5 +79,8 @@ public class DoUongMenuAdapter extends RecyclerView.Adapter<DoUongMenuAdapter.Do
     }
     public List<DoUong> getDoUongList() {
         return doUongList;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(DoUong doUong);
     }
 }

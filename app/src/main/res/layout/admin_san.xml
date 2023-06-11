@@ -14,10 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_left_arrow"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,49 +24,30 @@
                 android:textSize="23dp" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_admin_san_search"
-            android:layout_marginTop="23dp"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+        <SearchView
+            android:id="@+id/search_admin_san"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/ln_admin_san"
-            android:layout_toRightOf="@id/ln_admin_search"
-            android:backgroundTint="#FFFFFF"
-            android:src="@android:drawable/ic_menu_search" />
-
-        <TextView
             android:layout_marginLeft="10dp"
-            android:id="@+id/tv_admin_san_timsan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tìm sân:"
-            android:layout_marginTop="35dp"
-            android:textColor="@color/black"
-            android:layout_below="@id/ln_admin_san"
-            />
-        <EditText
-            android:id="@+id/ln_admin_search"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ln_admin_san"
-            android:layout_toRightOf="@id/tv_admin_san_timsan"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="19dp"
             android:layout_marginRight="3dp"
             android:hint="Tên sân"
-            android:textSize="16dp" />
+            android:iconifiedByDefault="false"
+            android:queryHint="Tên sân" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:padding="5dp"
+            android:id="@+id/rcv_admin_san"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ln_admin_search">
+            android:layout_below="@id/search_admin_san">
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/btn_admin_san_them"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

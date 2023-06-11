@@ -34,7 +34,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_below="@id/ln_admin_khachhang1"
-            android:layout_toRightOf="@id/ln_admin_search"
+            android:layout_toRightOf="@id/search_admin_san"
             android:backgroundTint="#FFFFFF"
             android:src="@android:drawable/ic_menu_search" />
 
@@ -49,7 +49,7 @@
             android:layout_below="@id/ln_admin_khachhang1"
             />
         <EditText
-            android:id="@+id/ln_admin_search"
+            android:id="@+id/search_admin_san"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/ln_admin_khachhang1"
@@ -62,7 +62,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ln_admin_search">
+            android:layout_below="@id/search_admin_san">
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 

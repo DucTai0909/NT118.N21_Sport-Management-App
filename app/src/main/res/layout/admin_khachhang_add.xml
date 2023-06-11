@@ -50,7 +50,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginLeft="12dp"/>
     <EditText
-        android:id="@+id/edt_hoten"
+        android:id="@+id/edt_admin_douong_update_giatien"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_hoten"
@@ -60,14 +60,14 @@
         android:id="@+id/tv_sdt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edt_hoten"
+        android:layout_below="@id/edt_admin_douong_update_giatien"
         android:text="Số điện thoại"
         android:textColor="@color/black"
         android:textSize="18dp"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="12dp"/>
     <EditText
-        android:id="@+id/edt_sdt"
+        android:id="@+id/edt_admin_douong_update_sl"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_sdt"
@@ -77,7 +77,7 @@
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edt_sdt"
+        android:layout_below="@id/edt_admin_douong_update_sl"
         android:text="Email"
         android:textColor="@color/black"
         android:textSize="18dp"
