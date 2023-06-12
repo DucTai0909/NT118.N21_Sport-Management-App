@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,7 +15,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:id="@+id/left_icon"
+            android:id="@+id/btn_khachhang_chitietsan_goback"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_back" />
 
@@ -30,6 +31,7 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/imv_khachhang_chitietsan_anhsan"
         android:layout_width="match_parent"
         android:layout_height="282dp"
         android:layout_below="@+id/relative_toolbar"
@@ -39,13 +41,13 @@
         android:src="@drawable/sb5n" />
 
     <TextView
-        android:id="@+id/tvTenSan"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_khachhang_chitietsan_tensan"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
+        android:layout_below="@id/imv_khachhang_chitietsan_anhsan"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="40dp"
         android:text="Sân bóng 5 người"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -55,57 +57,61 @@
         android:id="@+id/tvTinhTrang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTenSan"
+        android:layout_below="@+id/tv_khachhang_chitietsan_tensan"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:text="Tình trạng:"
         android:textColor="@color/black"
         android:textSize="17sp" />
 
     <TextView
-        android:id="@+id/tvTinhTrangThue"
+        android:id="@+id/tv_khachhang_chitietsan_tinhtrang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTenSan"
+        android:layout_below="@+id/tv_khachhang_chitietsan_tensan"
         android:layout_alignParentStart="true"
         android:layout_marginStart="105dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:text="Chưa thuê"
         android:textSize="17sp"
         android:textColor="#239B56"/>
 
     <TextView
-        android:id="@+id/tvChonGio"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_khachhang_chitietsan_ChonGio"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTinhTrang"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="Chọn giờ:"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@drawable/ic_calendar"
+        android:text="14/4/2023 19:00"
         android:textColor="@color/black"
-        android:textSize="17sp" />
+        android:textSize="17dp" />
 
     <TextView
-        android:id="@+id/tvChonGio_"
+        android:id="@+id/tv_khachhang_chitietsan_chonphut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvChonGio"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="20dp"
-        android:text="19:00-20:00 14/4/2023"
+        android:layout_toRightOf="@id/tv_khachhang_chitietsan_ChonGio"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="130dp"
+        android:text="45 phút"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="17dp"
+        android:layout_below="@id/tvTinhTrang"/>
+
 
     <TextView
+        android:id="@+id/tv_khachhang_chitietsan_gia"
         android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="261dp"
-        android:layout_marginTop="292dp"
+        android:layout_below="@id/imv_khachhang_chitietsan_anhsan"
+        android:layout_toRightOf="@id/tv_khachhang_chitietsan_tensan"
+        android:layout_marginTop="40dp"
         android:text="300.000VND"
+        android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="#D35400"/>
 
@@ -113,10 +119,10 @@
         android:id="@+id/tvThongTinSan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvChonGio_"
+        android:layout_below="@+id/tv_khachhang_chitietsan_ChonGio"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="Thông tin sân"
         android:textColor="@color/black"
         android:textSize="16sp" />
@@ -136,16 +142,16 @@ an toàn cho người chơi."
         android:textStyle="italic" />
 
     <Button
-        android:id="@+id/btnDatSan"
+        android:id="@+id/btn_khachhang_chitietsan_datsan"
+        app:backgroundTint="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_thongtinsan"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
+        android:background="@drawable/bg_btn_google"
         android:backgroundTint="#3CB371"
         android:text="Đặt sân"
         android:textSize="20dp" />
-
-
 
 </RelativeLayout>

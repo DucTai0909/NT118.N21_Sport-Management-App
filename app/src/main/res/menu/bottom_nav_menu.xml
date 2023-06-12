@@ -4,7 +4,7 @@
 
     <item android:title="Trang chủ"
         android:icon="@drawable/icon_home"
-        android:id="@+id/home"/>
+        android:id="@+id/bottom_khachhang_home"/>
     <item android:title="Lịch sử đặt sân"
         android:icon="@drawable/icon_history"
         android:id="@+id/history"/>

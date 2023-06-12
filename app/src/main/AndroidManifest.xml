@@ -45,6 +45,9 @@
         <activity android:name=".Admin.Douong.CapNhatDoUong"/>
         <activity android:name=".Admin.San.ThemSan"/>
         <activity android:name=".Admin.San.CapNhatSan"/>
+
+        <activity android:name=".KhachHang.ChonSan"/>
+        <activity android:name=".KhachHang.ChiTietSan"/>
     </application>
 
 </manifest>

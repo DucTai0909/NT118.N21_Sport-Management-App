@@ -8,6 +8,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.dangki.Admin.KhachHang.Menu;
+import com.example.dangki.KhachHang.ChiTietSan;
+import com.example.dangki.KhachHang.ChonSan;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        startActivity(new Intent(this, Menu.class));
+        startActivity(new Intent(this, ChonSan.class));
         finish();
-//        setContentView(R.layout.layout_userinfo_admin);
+//        setContentView(R.layout.toolbar);
     }
 }
