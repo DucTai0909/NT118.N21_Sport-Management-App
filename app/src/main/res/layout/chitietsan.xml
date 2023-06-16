@@ -7,7 +7,7 @@
     android:background="#3CB371">
 
     <include
-        layout="@layout/toolbar"
+        layout="@layout/khachhang_chonsan_chitietsan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -22,12 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dangki.Calendar.CalendarActivity;
 import com.example.dangki.Model.San;
 import com.example.dangki.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,13 +44,14 @@ public class ChiTietSan extends AppCompatActivity {
     TextView tv_tenSan, tv_chonphut, tv_giaSan, tv_tinhTrangSan, btn_chonGio;
     ImageView btn_goback, imv_anhsan;
     Date selectedStartDate, selectedEndDate;
+    String sanId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        setContentView(R.layout.toolbar);
+        setContentView(R.layout.khachhang_chonsan_chitietsan);
 
         FindViewByIds();
         LoadDuLieuSan();
@@ -87,14 +88,15 @@ public class ChiTietSan extends AppCompatActivity {
         btn_chonGio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowDateTimePickerDialog();
+                Intent intent= new Intent(ChiTietSan.this, CalendarActivity.class);
+                intent.putExtra("idSan_intent", sanId);
+                startActivity(intent);
             }
         });
 
         btnDatSan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sanId = getIntent().getStringExtra("idSan_intent");
                 checkSanAvailability(sanId, selectedStartDate, selectedEndDate);
 //                Toast.makeText(ChiTietSan.this, "starttime: "+ selectedStartDate.toString()
 //                        +"             end_time: "+ selectedEndDate.toString(), Toast.LENGTH_LONG).show();
@@ -244,6 +246,7 @@ public class ChiTietSan extends AppCompatActivity {
         imv_anhsan = findViewById(R.id.imv_khachhang_chitietsan_anhsan);
         btn_chonGio = findViewById(R.id.tv_khachhang_chitietsan_ChonGio);
         btnDatSan = findViewById(R.id.btn_khachhang_chitietsan_datsan);
+        sanId = getIntent().getStringExtra("idSan_intent");
     }
 
     private void LoadDuLieuSan() {

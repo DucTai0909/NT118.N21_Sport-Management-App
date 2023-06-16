@@ -10,7 +10,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="Dang ky"
+        android:label="Sport Management App"
         android:supportsRtl="true"
         android:theme="@style/Theme.DangKi"
 
@@ -47,7 +47,12 @@
         <activity android:name=".Admin.San.CapNhatSan"/>
 
         <activity android:name=".KhachHang.ChonSan"/>
-        <activity android:name=".KhachHang.ChiTietSan"/>
+
+        <activity android:name=".Calendar.CalendarActivity"/>
+        <activity android:name=".Calendar.WeekViewActivity"/>
+        <activity android:name=".Calendar.EventEditActivity"/>
+        <activity android:name=".Calendar.DailyCalendarActivity"/>
+
     </application>
 
 </manifest>
