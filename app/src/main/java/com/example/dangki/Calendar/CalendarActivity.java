@@ -1,27 +1,36 @@
 package com.example.dangki.Calendar;
 
 
+import static android.content.ContentValues.TAG;
 import static com.example.dangki.Calendar.CalendarUtils.daysInMonthArray;
 import static com.example.dangki.Calendar.CalendarUtils.monthYearFromDate;
 
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dangki.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,9 +38,15 @@ import java.util.Date;
 import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity  implements CalendarAdapter.OnItemListener{
+    static int REQUEST_DATSAN_CODE =1;
+    static final int RESULT_DATSAN_SUCCESS =2;
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
-    String sanID;
+    LocalTime selected_StartTime_final, selected_EndTime_final;
+    int gioChoi=0;
+    double totalDb=0.0, stadium_price=0.0;
+    String sanID="", rentalID="";
+    double san_price=0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +66,7 @@ public class CalendarActivity extends AppCompatActivity  implements CalendarAdap
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
         monthYearText = findViewById(R.id.monthYearTV);
         sanID = getIntent().getStringExtra("idSan_intent");
+        san_price = getIntent().getDoubleExtra("stadium_price", 0.0);
     }
 
     private void setMonthView()
@@ -81,16 +97,36 @@ public class CalendarActivity extends AppCompatActivity  implements CalendarAdap
     {
         Intent intent= new Intent(CalendarActivity.this, DailyCalendarActivity.class);
         intent.putExtra("idSan_intent", sanID);
+        intent.putExtra("stadium_price", san_price);
         CalendarUtils.selectedDate = date;
         setMonthView();
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_DATSAN_CODE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_DATSAN_CODE && resultCode ==1){
+            totalDb =data.getDoubleExtra("totalDb", 0.0);
+            selected_StartTime_final = LocalTime.parse(data.getStringExtra("start_time"));
+            selected_StartTime_final = LocalTime.parse(data.getStringExtra("end_time"));
+            gioChoi = data.getIntExtra("rental_time", 0);
+
+            Intent intent = new Intent();
+            intent.putExtra("totalDb", totalDb);
+            intent.putExtra("start_time", selected_StartTime_final.toString());
+            intent.putExtra("end_time", selected_EndTime_final.toString());
+            intent.putExtra("rental_time", gioChoi);
+            setResult(RESULT_DATSAN_SUCCESS, intent);
+            finish();
+        }
+    }
 
 
     public void weeklyAction(View view)
     {
         startActivity(new Intent(this, WeekViewActivity.class));
     }
+
 }
 

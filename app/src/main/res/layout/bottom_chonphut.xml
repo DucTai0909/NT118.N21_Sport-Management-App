@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -27,6 +27,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="Hủy"
+        android:textColor="#FFFFFF"
         app:backgroundTint="#FF0000"
         android:layout_below="@id/numberpicker_khachhang_chitietsan_sophut"/>
     <Button
@@ -36,6 +37,7 @@
         android:background="@drawable/bg_btn_google"
         app:backgroundTint="#50C878"
         android:text="Chọn"
+        android:textColor="#FFFFFF"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"

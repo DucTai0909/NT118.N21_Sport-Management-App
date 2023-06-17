@@ -34,17 +34,22 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class ChiTietSan extends AppCompatActivity {
+    static final int REQUEST_DATSAN_CODE =1;
     Button btnDatSan;
     TextView tv_tenSan, tv_chonphut, tv_giaSan, tv_tinhTrangSan, btn_chonGio;
     ImageView btn_goback, imv_anhsan;
-    Date selectedStartDate, selectedEndDate;
-    String sanId;
+    Date selectedStartDate,selectedEndDate;
+    LocalTime selected_StartTime_final, selected_EndTime_final;
+    int gioChoi=0;
+    double totalDb=0.0, stadium_price=0.0;
+    String sanId="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,18 +95,32 @@ public class ChiTietSan extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent= new Intent(ChiTietSan.this, CalendarActivity.class);
                 intent.putExtra("idSan_intent", sanId);
-                startActivity(intent);
+                intent.putExtra("stadium_price", Double.parseDouble(tv_giaSan.getText().toString()));
+                startActivityForResult(intent, REQUEST_DATSAN_CODE);
             }
         });
 
-        btnDatSan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkSanAvailability(sanId, selectedStartDate, selectedEndDate);
-//                Toast.makeText(ChiTietSan.this, "starttime: "+ selectedStartDate.toString()
-//                        +"             end_time: "+ selectedEndDate.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+//        btnDatSan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                checkSanAvailability(sanId, selectedStartDate, selectedEndDate);
+////                Toast.makeText(ChiTietSan.this, "starttime: "+ selectedStartDate.toString()
+////                        +"             end_time: "+ selectedEndDate.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_DATSAN_CODE && resultCode ==1){
+            totalDb =data.getDoubleExtra("totalDb", 0.0);
+            selected_StartTime_final = LocalTime.parse(data.getStringExtra("start_time"));
+            selected_StartTime_final = LocalTime.parse(data.getStringExtra("end_time"));
+            gioChoi = data.getIntExtra("rental_time", 0);
+
+            finish();
+        }
     }
 
     private String calculateEndTime(String startTime) {
@@ -159,7 +178,7 @@ public class ChiTietSan extends AppCompatActivity {
                                 Log.d("Lôi",task.getException().getMessage());
                             }
                     }
-                }
+                    }
 
                 });
     }

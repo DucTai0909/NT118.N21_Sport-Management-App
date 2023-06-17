@@ -5,33 +5,54 @@ import static android.content.ContentValues.TAG;
 import static com.example.dangki.Calendar.CalendarUtils.selectedDate;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.text.CaseMap;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.KhachHang.ChiTietSan;
+import com.example.dangki.KhachHang.ChonSan;
+import com.example.dangki.KhachHang.DatLichThanhCong;
 import com.example.dangki.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -43,22 +64,35 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class DailyCalendarActivity extends AppCompatActivity
 {
+    static final int RESULT_DATSAN_SUCCESS =1;
+    private boolean isFirstBookingComplete = false;
 
-    private TextView monthDayText;
+    private TextView monthDayText, tv_chonGioChoi;
     private TextView dayOfWeekTV;
     private ListView hourListView;
-    LocalTime time;
+
     List<LocalTime> start_time_list;
     List<LocalTime> end_time_list;
-    String sanID;
-    Button btn_datlich;
-    LocalTime selected_StartTime;
+    String sanID = "", rentalID ="";
+    Button btn_datlich, btn_themLich;
+    LocalTime selected_StartTime_final, selected_EndTime_final;
     Date selected_EndTime;
+    double stadium_price = 0.0, totalDb = 0.0;
+    int gioChoi = 0;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -78,6 +112,214 @@ public class DailyCalendarActivity extends AppCompatActivity
 //        Event newEvent = new Event(eventName, CalendarUtils.selectedDate, time);
 //        Event.eventsList.add(newEvent);
 
+
+        btn_themLich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DailyCalendarActivity.this);
+                builder.setTitle("Xác nhận thêm lich đặt sân")
+                        .setMessage("Quý khách vui lòng xác nhận thêm lịch đặt sân?")
+                        .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                CompletableFuture<Boolean> firstBookingFuture = checkFirstBookingAsync();
+
+                                firstBookingFuture.thenAccept(isFirstBooking -> {
+                                    if (isFirstBooking) {
+                                        // Thực hiện công việc sau khi là first booking
+                                        AddFirstBooking();
+                                    } else {
+                                        // Thực hiện công việc khi không phải first booking
+                                        AddBooking();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Đóng dialog
+                                dialogInterface.dismiss();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+
+    }
+
+
+    private void AddBooking() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        WriteBatch batch = db.batch();
+
+        Date start_time_add_to_db = new Date();
+        Date end_time_add_to_db = new Date();
+        start_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
+        end_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_EndTime_final);
+
+        // Dữ liệu cần thêm vào bảng Stadium_Rental
+        Map<String, Object> stadiumRentalData = new HashMap<>();
+        stadiumRentalData.put("rental_id", rentalID);
+        stadiumRentalData.put("start_time", start_time_add_to_db);
+        stadiumRentalData.put("end_time", end_time_add_to_db);
+        stadiumRentalData.put("rental_time", gioChoi);
+        stadiumRentalData.put("stadium_id", sanID);
+
+        // Thêm dữ liệu vào bảng Stadium_Rental
+        DocumentReference stadiumRentalRef = db.collection("Stadium_Rental").document();
+        batch.set(stadiumRentalRef, stadiumRentalData);
+
+        // Cập nhật dữ liệu trong bảng Rental
+        double total_add = totalDb + (stadium_price / 60) * gioChoi;
+        Map<String, Object> updateTotal= new HashMap<>();
+        updateTotal.put("total", total_add);
+
+        // Cập nhật dữ liệu trong bảng Rental
+        DocumentReference rentalRef = db.collection("Rental").document(rentalID);
+        batch.update(rentalRef, updateTotal);
+
+        // Thực hiện tác vụ Batch
+        batch.commit()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        progressBar.setVisibility(View.GONE);
+
+                        startActivity(new Intent(getApplicationContext(), DatLichThanhCong.class));
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Có lỗi xảy ra khi thêm dữ liệu",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void AddFirstBooking() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        WriteBatch batch = db.batch();
+
+        // Dữ liệu cần thêm vào bảng Rental
+        String userID = "sAvjTnumW8fEcSiahKiGsH1g2102";
+        double total_add = totalDb + (stadium_price / 60) * gioChoi;
+
+        Map<String, Object> rentalData = new HashMap<>();
+        rentalData.put("date", Timestamp.now());
+        rentalData.put("total", total_add);
+        rentalData.put("user_id", userID);
+        rentalData.put("status", "Booking");
+
+        // Thêm dữ liệu vào bảng Rental
+        DocumentReference rentalRef = db.collection("Rental").document();
+        rentalID = rentalRef.getId(); // Lấy documentID của Rental
+        batch.set(rentalRef, rentalData);
+
+
+
+        // Dữ liệu cần thêm vào bảng Stadium_Rental
+        Date start_time_add_to_db = new Date();
+        Date end_time_add_to_db = new Date();
+        start_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
+        end_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_EndTime_final);
+
+        Map<String, Object> stadiumRentalData = new HashMap<>();
+        stadiumRentalData.put("rental_id", rentalID);
+        stadiumRentalData.put("stadium_id", sanID);
+//        stadiumRentalData.put("stadium_id", 1);
+        stadiumRentalData.put("start_time", start_time_add_to_db);
+        stadiumRentalData.put("end_time", end_time_add_to_db);
+        stadiumRentalData.put("rental_time", gioChoi);
+
+        // Thêm dữ liệu vào bảng Stadium_Rental
+        DocumentReference stadiumRentalRef = db.collection("Stadium_Rental").document();
+        batch.set(stadiumRentalRef, stadiumRentalData);
+
+        batch.commit()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
+
+//                        startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                        startActivity(new Intent(getApplicationContext(), DatLichThanhCong.class));
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Có lỗi xảy ra khi thêm dữ liệu",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+//    void FirstAddToDb(DataCallback callback){
+//        Date start_time_add_to_db = new Date();
+//        Date end_time_add_to_db = new Date();
+//        start_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
+//        end_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_EndTime_final);
+//
+//        Map<String, Object> stadiumRentalData = new HashMap<>();
+//        stadiumRentalData.put("rental_id", rentalID);
+//        stadiumRentalData.put("stadium_id", sanID);
+////        stadiumRentalData.put("stadium_id", 1);
+//        stadiumRentalData.put("start_time", start_time_add_to_db);
+//        stadiumRentalData.put("end_time", end_time_add_to_db);
+//        stadiumRentalData.put("rental_time", gioChoi);
+//
+//        FirebaseFirestore db =FirebaseFirestore.getInstance();
+//        db.collection("Stadium_Rental").add(stadiumRentalData)
+//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentReference document = task.getResult();
+//                            callback.onSuccess(true);
+//
+////                            progressBar.setVisibility(View.GONE);
+////                            Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
+
+
+    CompletableFuture<Boolean> checkFirstBookingAsync() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = "sAvjTnumW8fEcSiahKiGsH1g2102";
+        progressBar.setVisibility(View.VISIBLE);
+
+        db.collection("Rental")
+                .whereEqualTo("user_id", userID)
+                .whereEqualTo("status", "Booking")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (!querySnapshot.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            rentalID = documentSnapshot.getId();
+                            totalDb = documentSnapshot.getDouble("total");
+                            future.complete(false); // Trả về kết quả false
+                        } else {
+                            future.complete(true); // Trả về kết quả true
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        future.completeExceptionally(task.getException()); // Trả về ngoại lệ khi có lỗi
+                    }
+                });
+
+        return future;
     }
 
     private void initWidgets()
@@ -88,15 +330,19 @@ public class DailyCalendarActivity extends AppCompatActivity
         btn_datlich = findViewById(R.id.btn_khachhang_datlichngay);
         Intent intent = getIntent();
         sanID = intent.getStringExtra("idSan_intent");
+        stadium_price = intent.getDoubleExtra("stadium_price", 0.0);
+        tv_chonGioChoi = findViewById(R.id.tv_khachhang_chitietsan_giochoi);
+        btn_themLich = findViewById(R.id.btn_khachhang_chitietsan_themLich);
+        progressBar = findViewById(R.id.progressBar_khachhang_themlichdatsan);
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        GetData();
-//        setDayView();
-    }
+//    @Override
+//    protected void onResume()
+//    {
+//        super.onResume();
+////        GetData();
+////        setDayView();
+//    }
 
     private void setDayView()
     {
@@ -159,10 +405,13 @@ public class DailyCalendarActivity extends AppCompatActivity
 
                                     start_time_list.add(localTimeStart_time);
                                     end_time_list.add(localTimeEnd_time);
-                                    while (!iTime.isAfter(localTimeEnd_time.plusHours(1))){
-                                        Event newEvent = new Event(id, selectedDate, iTime);
-                                        Event.eventsList.add(newEvent);
-                                        iTime = iTime.plusHours(1);
+
+
+
+                                        while (!iTime.isAfter(localTimeEnd_time)){
+                                            Event newEvent = new Event(id, selectedDate, iTime);
+                                            Event.eventsList.add(newEvent);
+                                            iTime = iTime.plusHours(1);
                                     }
                                 }
                             }
@@ -235,21 +484,32 @@ public class DailyCalendarActivity extends AppCompatActivity
                 if(selectedTime.isBefore(LocalTime.of(5,30))){
                     Toast.makeText(getApplicationContext(), "11PM - 5:30AM chưa phục vụ. Quý khách" +
                             " vui lòng chọn giờ khác", Toast.LENGTH_SHORT).show();
+
+                    ResetTrangThaiNeuKhongHopLe();
+
                 }else if (selectedTime.isAfter(LocalTime.of(22,59))) {
                     Toast.makeText(getApplicationContext(), "11PM - 5:30AM chưa phục vụ. Quý khách" +
                             " vui lòng chọn giờ khác", Toast.LENGTH_SHORT).show();
 
+                    ResetTrangThaiNeuKhongHopLe();
                     //Kiểm tra nếu Giờ được chọn là giờ quá khứ
                 }else if(selectedDateTime.isBefore(LocalDateTime.now())){
                     Toast.makeText(getApplicationContext(), "Giờ không hợp lệ"
                             , Toast.LENGTH_SHORT).show();
+
+                    ResetTrangThaiNeuKhongHopLe();
+
                 } else if (isBetween) {
-                    Toast.makeText(getApplicationContext(), "Giờ đã được chọn, vui lòng chọn lại giờ khác"
+                    Toast.makeText(getApplicationContext(), "Giờ đã được chọn, vui lòng chọn " +
+                                    "lại giờ khác"
                             , Toast.LENGTH_SHORT).show();
+
+                    ResetTrangThaiNeuKhongHopLe();
+
                 } else {
                     // Giờ hợp lệ, tiếp tục xử lý
                     // ...
-                    selected_StartTime = selectedTime;
+                    selected_StartTime_final = selectedTime;
                     showBottomDialog();
                 }
             }
@@ -259,6 +519,7 @@ public class DailyCalendarActivity extends AppCompatActivity
     }
     private void showBottomDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(DailyCalendarActivity.this);
+//        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         bottomSheetDialog.setContentView(R.layout.bottom_chonphut);
 
         NumberPicker numberPicker = bottomSheetDialog.findViewById(R.id.numberpicker_khachhang_chitietsan_sophut);
@@ -276,14 +537,16 @@ public class DailyCalendarActivity extends AppCompatActivity
 //                tv_chonphut.setText(phutValues[numberPicker.getValue()] + " phút");
 
                 // Tạo một đối tượng Calendar từ selectedStartDate
-                Date selectedStartDate = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime);
+                Date selectedStartDate = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(selectedStartDate);
 
                 // Thêm số phút được chọn vào selectedStartDate
                 int phut = Integer.parseInt(phutValues[numberPicker.getValue()]);
+
                 calendar.add(Calendar.MINUTE, phut);
                 selected_EndTime = calendar.getTime();
+
                 LocalTime selected_EndTime_LocalTime = ConvertDateToLocalTime(selected_EndTime);
                 // Lưu selectedEndDate
                 boolean isBetween = false;
@@ -299,14 +562,38 @@ public class DailyCalendarActivity extends AppCompatActivity
                         break;
                     }
                 }
+
+                /*
+                TH cuối cùng (hợp lệ)
+                 */
                 if(!isBetween){
                     bottomSheetDialog.dismiss();
-                    Toast.makeText(DailyCalendarActivity.this, "Oke", Toast.LENGTH_SHORT).show();
+                    tv_chonGioChoi.setText("Bạn vừa chọn: " + selected_StartTime_final + " - "
+                            + selected_EndTime_LocalTime );
+
+                    GetData();
+                    LocalTime iTime = selected_StartTime_final;
+                    selected_EndTime_LocalTime = selected_EndTime_LocalTime.withSecond(0);
+                        while (!iTime.isAfter(selected_EndTime_LocalTime)){
+                            Event newEvent = new Event("", selectedDate, iTime);
+                            Event.eventsList.add(newEvent);
+                            iTime = iTime.plusHours(1);
+                        }
+
+                    btn_datlich.setText("Chọn giờ khác");
+                    setDayView();
+                    btn_themLich.setVisibility(View.VISIBLE);
+                    selected_EndTime_final = selected_EndTime_LocalTime;
+                    gioChoi =phut;
+
                 }else{
-                    Toast.makeText(DailyCalendarActivity.this, "Khung giờ bạn chọn đã có lịch đặt khác (" +
-                            start_Time_db.getHour() + ":" + start_Time_db.getMinute() + " - " +
-                            end_Time_db.getHour() + ":" + end_Time_db.getMinute() +
-                            "). Vui lòng chọn giờ khác!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DailyCalendarActivity.this, "Khung giờ bạn chọn đã " +
+                            "có lịch đặt khác (" + start_Time_db.getHour() + ":"
+                            + start_Time_db.getMinute() + " - " + end_Time_db.getHour()
+                            + ":" + end_Time_db.getMinute() + "). Vui lòng chọn giờ khác!",
+                            Toast.LENGTH_SHORT).show();
+
+                    ResetTrangThaiNeuKhongHopLe();
                 }
             }
         });
@@ -318,6 +605,11 @@ public class DailyCalendarActivity extends AppCompatActivity
             }
         });
 
+//        bottomSheetDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT);
+//        bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        bottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+//        bottomSheetDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
         bottomSheetDialog.show();
     }
     Date ConvertLocalDateTimeToDate(LocalDate localDate, LocalTime localTime){
@@ -337,4 +629,33 @@ public class DailyCalendarActivity extends AppCompatActivity
         LocalTime localTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         return localTime;
     }
+    void ResetTrangThaiNeuKhongHopLe(){
+        tv_chonGioChoi.setText("");
+        GetData();
+        btn_themLich.setVisibility(View.GONE);
+        btn_datlich.setText("Đặt lịch ngay");
+    }
+//    void ShowSuccessScreen(){
+//        Dialog successSreen = new Dialog(DailyCalendarActivity.this);
+//        successSreen.setContentView(R.layout.success_screen_themlichdatsan);
+//        Button btn_tieptuc = successSreen.findViewById(R.id.btn_khachang_datsanthanhcong_tieptuc);
+//        Button btn_sankhac = successSreen.findViewById(R.id.btn_khachang_datsanthanhcong_sankhac);
+//        successSreen.show();
+//
+//        btn_tieptuc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(DailyCalendarActivity.this, Dangnhapthanhcong.class));
+//                finish();
+//            }
+//        });
+//
+//        btn_sankhac.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setResult(RESULT_DATSAN_SUCCESS);
+//                finish();
+//            }
+//        });
+//    }
 }

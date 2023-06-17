@@ -52,6 +52,7 @@
         <activity android:name=".Calendar.WeekViewActivity"/>
         <activity android:name=".Calendar.EventEditActivity"/>
         <activity android:name=".Calendar.DailyCalendarActivity"/>
+        <activity android:name=".KhachHang.DatLichThanhCong"/>
 
     </application>
 
