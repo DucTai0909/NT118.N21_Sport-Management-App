@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import static com.example.dangki.Calendar.CalendarUtils.selectedDate;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -77,7 +78,8 @@ import java.util.function.Function;
 
 public class DailyCalendarActivity extends AppCompatActivity
 {
-    static final int RESULT_DATSAN_SUCCESS =1;
+    static final int REQUEST_THANHCONG =1;
+    static final int RESULT_DATSAN_SUCCESS =2;
     private boolean isFirstBookingComplete = false;
 
     private TextView monthDayText, tv_chonGioChoi;
@@ -86,7 +88,7 @@ public class DailyCalendarActivity extends AppCompatActivity
 
     List<LocalTime> start_time_list;
     List<LocalTime> end_time_list;
-    String sanID = "", rentalID ="";
+    String sanID = "", rentalID ="", userID;
     Button btn_datlich, btn_themLich;
     LocalTime selected_StartTime_final, selected_EndTime_final;
     Date selected_EndTime;
@@ -104,13 +106,6 @@ public class DailyCalendarActivity extends AppCompatActivity
         initWidgets();
         GetData();
 
-
-//        GetData();
-//        setDayView();
-//        time = LocalTime.now();
-//        String eventName = eventNameET.getText().toString();
-//        Event newEvent = new Event(eventName, CalendarUtils.selectedDate, time);
-//        Event.eventsList.add(newEvent);
 
 
         btn_themLich.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +146,10 @@ public class DailyCalendarActivity extends AppCompatActivity
     }
 
 
+    /*
+    Phương thức này dùng để thêm vào collection "Stadium_Rental" sau khi đã check là khách hàng đã
+    có đặt lịch (Đã chọn 1 sân), đồng thời sẽ cập nhật lại "total" trong "Rental"
+     */
     private void AddBooking() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         WriteBatch batch = db.batch();
@@ -188,8 +187,11 @@ public class DailyCalendarActivity extends AppCompatActivity
                     public void onSuccess(Void unused) {
                         progressBar.setVisibility(View.GONE);
 
-                        startActivity(new Intent(getApplicationContext(), DatLichThanhCong.class));
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), DatLichThanhCong.class);
+                        intent.putExtra("userID", userID);
+                        intent.putExtra("rentalID", rentalID);
+
+                        startActivityForResult(intent, REQUEST_THANHCONG);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -201,13 +203,18 @@ public class DailyCalendarActivity extends AppCompatActivity
                 });
     }
 
+    /*
+    Phương thức này dùng để thêm lịch đặt sân vào Firestore khi khách hàng lần đầu đặt lịch, lần đầu
+    ở đây không có nghĩa là lần đầu đặt trên app, mà là đơn hàng mới, vì 1 lần ta có thể đặt nhiều
+    sân, nhiều đồ uống, nên nếu lần đầu ta sẽ tạo một Document ở Collection "Rental" với status là
+    "Booking", sau đó thêm dữ liệu vào Collection "Drink_Rental"
+     */
     public void AddFirstBooking() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         WriteBatch batch = db.batch();
 
         // Dữ liệu cần thêm vào bảng Rental
-        String userID = "sAvjTnumW8fEcSiahKiGsH1g2102";
         double total_add = totalDb + (stadium_price / 60) * gioChoi;
 
         Map<String, Object> rentalData = new HashMap<>();
@@ -218,9 +225,11 @@ public class DailyCalendarActivity extends AppCompatActivity
 
         // Thêm dữ liệu vào bảng Rental
         DocumentReference rentalRef = db.collection("Rental").document();
-        rentalID = rentalRef.getId(); // Lấy documentID của Rental
-        batch.set(rentalRef, rentalData);
 
+        // Lấy documentID của Rental để dùng thêm vào "Drink_Rental" hoặc để truyền qua Intent
+        // để sau đặt đồ uống hay thanh toán
+        rentalID = rentalRef.getId();
+        batch.set(rentalRef, rentalData);
 
 
         // Dữ liệu cần thêm vào bảng Stadium_Rental
@@ -247,9 +256,10 @@ public class DailyCalendarActivity extends AppCompatActivity
                     public void onSuccess(Void aVoid) {
                         progressBar.setVisibility(View.GONE);
 
-//                        startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
-                        startActivity(new Intent(getApplicationContext(), DatLichThanhCong.class));
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), DatLichThanhCong.class);
+                        intent.putExtra("userID", userID);
+                        intent.putExtra("rentalID", rentalID);
+                        startActivityForResult(intent, REQUEST_THANHCONG);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -261,7 +271,17 @@ public class DailyCalendarActivity extends AppCompatActivity
                 });
 
     }
-//    void FirstAddToDb(DataCallback callback){
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_THANHCONG && resultCode == 1){
+            setResult(RESULT_DATSAN_SUCCESS);
+            finish();
+        }
+    }
+
+    //    void FirstAddToDb(DataCallback callback){
 //        Date start_time_add_to_db = new Date();
 //        Date end_time_add_to_db = new Date();
 //        start_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
@@ -292,10 +312,15 @@ public class DailyCalendarActivity extends AppCompatActivity
 //    }
 
 
+    /*
+    Hàm này dùng để check xem liệu khách hàng này có đang Booking hay không
+    Booking là dùng để cho khách hàng đặt nhiều sân cùng lúc, khi khách hàng Xác nhận cuối cùng
+    ở màn hình chọn đồ uống, trạng thái status sẽ chuyển sang "Booked", sau khi thanh toán sẽ chuyển
+    sang "Done"
+     */
     CompletableFuture<Boolean> checkFirstBookingAsync() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userID = "sAvjTnumW8fEcSiahKiGsH1g2102";
         progressBar.setVisibility(View.VISIBLE);
 
         db.collection("Rental")
@@ -328,12 +353,15 @@ public class DailyCalendarActivity extends AppCompatActivity
         dayOfWeekTV = findViewById(R.id.dayOfWeekTV);
         hourListView = findViewById(R.id.hourListView);
         btn_datlich = findViewById(R.id.btn_khachhang_datlichngay);
-        Intent intent = getIntent();
-        sanID = intent.getStringExtra("idSan_intent");
-        stadium_price = intent.getDoubleExtra("stadium_price", 0.0);
+
         tv_chonGioChoi = findViewById(R.id.tv_khachhang_chitietsan_giochoi);
         btn_themLich = findViewById(R.id.btn_khachhang_chitietsan_themLich);
         progressBar = findViewById(R.id.progressBar_khachhang_themlichdatsan);
+
+        Intent intent = getIntent();
+        sanID = intent.getStringExtra("idSan_intent");
+        stadium_price = intent.getDoubleExtra("stadium_price", 0.0);
+        userID = intent.getStringExtra("userID");
     }
 
 //    @Override

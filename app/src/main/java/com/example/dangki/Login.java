@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dangki.Admin.Douong.Menu;
+import com.example.dangki.KhachHang.ChonSan;
 import com.example.dangki.KhachHang.DatSan;
 import com.example.dangki.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -34,6 +36,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     EditText email, password;
@@ -87,32 +92,69 @@ public class Login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkEmpty()){
+                if (checkEmpty()) {
                     String uEmail = email.getText().toString().trim();
                     String uPass = password.getText().toString().trim();
 
                     ProgressDialog progressDialog = new ProgressDialog(Login.this);
-
                     progressDialog.setTitle("Loading");
                     progressDialog.setMessage("Please wait...");
-                    progressDialog.setCancelable(true); // Cho phép hủy
+                    progressDialog.setCancelable(true);
                     progressDialog.show();
+
                     fAuth.signInWithEmailAndPassword(uEmail, uPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),DatSan.class));
-                                finish();
-                            }else{
-                                Toast.makeText(Login.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                DocumentReference userRef = db
+                                        .collection("User")
+                                        .document(fAuth.getUid());
+                                userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                String role = document.getString("role_id");
+                                                if (role != null && role.equals("admin")) {
+                                                    Toast.makeText(Login.this,
+                                                            "Đăng nhập thành công",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(),
+                                                            Menu.class);
+                                                    intent.putExtra("userID",
+                                                            fAuth.getCurrentUser().getUid());
+                                                    startActivity(intent);
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(Login.this, "Đăng nhập thành công",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(),
+                                                            ChonSan.class);
+                                                    intent.putExtra("userID",
+                                                            fAuth.getCurrentUser().getUid());
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }
+                                        } else {
+                                            Toast.makeText(Login.this,
+                                                    "Lỗi trong quá trình truy vấn người dùng",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(Login.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
                 }
             }
         });
+
 
     }
     public boolean checkEmpty(){
@@ -177,10 +219,10 @@ public class Login extends AppCompatActivity {
                             User dbUser = new User();
                             dbUser.setId(fuser.getUid());
                             dbUser.setName(fuser.getDisplayName());
-                            dbUser.setPhoto(fuser.getPhotoUrl().toString());
+                            dbUser.setImg_url(fuser.getPhotoUrl().toString());
                             dbUser.setPhoneNumber(fuser.getPhoneNumber());
                             dbUser.setEmail(fuser.getEmail());
-
+                            dbUser.setRole_id("customer");
                             AddUserToFirestore(dbUser);
                         }
                     }
@@ -198,33 +240,48 @@ public class Login extends AppCompatActivity {
                         // Người dùng đã tồn tại trong Firestore
                         // Thực hiện các hành động cần thiết sau khi đăng nhập bằng Google
                         Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), DatSan.class));
+                        startActivity(new Intent(getApplicationContext(), ChonSan.class));
                         finish();
                     } else {
                         // Người dùng chưa tồn tại trong Firestore
                         // Thêm người dùng mới vào Firestore
 
                         // Thực hiện thêm dữ liệu vào Firestore
-                        db.collection("User").document(dbUser.getId())
-                                .set(dbUser)
+                        Map<String, Object> newUser = new HashMap<>();
+                        newUser.put("name", dbUser.getName());
+                        newUser.put("phoneNumber", dbUser.getPhoneNumber());
+                        newUser.put("gender", dbUser.getGender());
+                        newUser.put("email", dbUser.getEmail());
+                        newUser.put("img_url", dbUser.getImg_url());
+                        newUser.put("password", dbUser.getPassword());
+                        newUser.put("birthdate", dbUser.getBirthdate());
+                        newUser.put("role_id", "customer");
+                        db.collection("User")
+                                .document(dbUser.getId())
+                                .set(newUser)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         // Thực hiện các hành động cần thiết sau khi thêm người dùng mới vào Firestore
-                                        Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), DatSan.class));
+                                        Toast.makeText(Login.this, "Đăng nhập thành công",
+                                                Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), ChonSan.class);
+                                        intent.putExtra("userID", dbUser.getId());
+                                        startActivity(intent);
                                         finish();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(Login.this, "Thêm người dùng vào Firestore thất bại", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login.this, "Thêm người dùng vào " +
+                                                "Firestore thất bại", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     }
                 } else {
-                    Toast.makeText(Login.this, "Lỗi khi truy cập Firestore", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Lỗi khi truy cập Firestore",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });

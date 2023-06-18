@@ -14,7 +14,9 @@ import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.R;
 
 public class DatLichThanhCong extends AppCompatActivity {
+    static int RESULT_DATLICH_THANHCONG = 1;
     Button btn_tieptuc, btn_sankhac;
+    String userID, rentalID;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,11 @@ public class DatLichThanhCong extends AppCompatActivity {
         btn_tieptuc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                Intent intent = new Intent(getApplicationContext(), ChonDoUong.class);
+                intent.putExtra("userID", userID);
+                intent.putExtra("rentalID", rentalID);
+                setResult(RESULT_DATLICH_THANHCONG);
+                startActivity(intent);
                 finish();
             }
         });
@@ -36,7 +42,9 @@ public class DatLichThanhCong extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ChonSan.class);
+                intent.putExtra("userID", userID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                setResult(RESULT_DATLICH_THANHCONG);
                 startActivity(intent);
                 finish();
             }
@@ -46,5 +54,8 @@ public class DatLichThanhCong extends AppCompatActivity {
     private void FindViewByIds() {
         btn_tieptuc = findViewById(R.id.btn_khachang_datsanthanhcong_tieptuc);
         btn_sankhac = findViewById(R.id.btn_khachang_datsanthanhcong_sankhac);
+
+        rentalID = getIntent().getStringExtra("rentalID");
+        userID = getIntent().getStringExtra("userID");
     }
 }

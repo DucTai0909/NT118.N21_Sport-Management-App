@@ -11,7 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dangki.KhachHang.ChonSan;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,9 +32,7 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         // Khởi tạo các thành phần của Layout
-        currentTime = findViewById(R.id.textViewCurrentTime);
-        loadingBar = findViewById(R.id.progressBar);
-        loadingBar.setVisibility(View.VISIBLE);
+        FindViewByIds();
 
         /*
         Xử lý ngày giờ để đưa lên màn hình
@@ -47,9 +48,27 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void run() {
                 loadingBar.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(Welcome.this, Login.class));
-                finish();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = auth.getCurrentUser();
+
+                if(currentUser != null){
+                    String userID = currentUser.getUid();
+
+                    Intent intent = new Intent(getApplicationContext(), ChonSan.class);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finish();
+                }
             }
         },2250);
+    }
+    void FindViewByIds(){
+        currentTime = findViewById(R.id.textViewCurrentTime);
+        loadingBar = findViewById(R.id.progressBar);
+        loadingBar.setVisibility(View.VISIBLE);
+
     }
 }

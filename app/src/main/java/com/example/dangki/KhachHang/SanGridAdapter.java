@@ -19,10 +19,12 @@ import java.util.List;
 public class SanGridAdapter extends BaseAdapter {
     private Context context;
     private List<San> sanList;
+    String userID;
 
-    public SanGridAdapter(Context context, List<San> sanList) {
+    public SanGridAdapter(Context context, List<San> sanList, String userID) {
         this.context = context;
         this.sanList = sanList;
+        this.userID = userID;
     }
     void setSanList(List<San> sanList){
         this.sanList = sanList;
@@ -68,7 +70,11 @@ public class SanGridAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // Chuyển sang màn hình chi tiết sân với thông tin sân tương ứng
                 Intent intent = new Intent(context, ChiTietSan.class);
-                intent.putExtra("idSan_intent", san.getId()); // Truyền thông tin sân qua Intent
+                intent.putExtra("userID", userID);
+                intent.putExtra("idSan_intent", san.getId());
+                intent.putExtra("img_url", san.getImg_url());
+                intent.putExtra("name", san.getName());
+                intent.putExtra("price", san.getPrice());
                 context.startActivity(intent);
             }
         });

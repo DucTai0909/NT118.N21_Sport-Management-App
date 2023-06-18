@@ -74,7 +74,7 @@
         android:layout_marginLeft="30dp"
         android:textSize="15dp"/>
     <TextView
-        android:id="@+id/tv_email"
+        android:id="@+id/tv_khachhang_userinfo_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_admin_douong_update_sl"
@@ -87,7 +87,7 @@
         android:id="@+id/edt_email"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_email"
+        android:layout_below="@id/tv_khachhang_userinfo_email"
         android:layout_marginLeft="30dp"
         android:textSize="15dp"/>
     <TextView

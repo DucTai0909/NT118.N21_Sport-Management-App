@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,8 +21,10 @@ import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.Model.San;
 import com.example.dangki.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,7 +40,9 @@ public class ChonSan extends AppCompatActivity {
     GridView gridView;
     SanGridAdapter sanGridAdapter;
     List<San> sanList;
+    String userID, rentalID;
     BottomNavigationView bottomNavigationView;
+    FloatingActionButton btn_douong;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,7 @@ public class ChonSan extends AppCompatActivity {
         setContentView(R.layout.khachhang_chonsan);
 
         FindViewByIds();
+        CheckDatLichLan2();
         BottomNavigation();
         setupGridView();
         loadStadiumData();
@@ -65,6 +71,39 @@ public class ChonSan extends AppCompatActivity {
                 return true;
             }
         });
+        btn_douong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChonDoUong.class);
+                intent.putExtra("rentalID", rentalID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CheckDatLichLan2();
+    }
+
+    private void CheckDatLichLan2() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Rental")
+                .whereEqualTo("user_id", userID)
+                .whereEqualTo("status", "Booking")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(!queryDocumentSnapshots.isEmpty()){
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+
+                            rentalID = documentSnapshot.getId();
+                            btn_douong.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -78,11 +117,15 @@ public class ChonSan extends AppCompatActivity {
     }
 
     private void BottomNavigation() {
+        bottomNavigationView.setSelectedItemId(R.id.bottom_khachhang_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.bottom_khachhang_home:
                     return true;
-
+                case R.id.bottom_khachhang_menu_info:
+                    startActivity(new Intent(getApplicationContext(), ThongTinUser.class));
+                    finish();
+                    return true;
             }
             return false;
         });
@@ -108,11 +151,14 @@ public class ChonSan extends AppCompatActivity {
         searchView = findViewById(R.id.searchView_khachhang_chonsan);
         gridView = findViewById(R.id.gridView_khachhang_chonsan);
         bottomNavigationView = findViewById(R.id.bottom_khachhang_Home);
+        btn_douong = findViewById(R.id.btn_khachhang_chonsan_douong);
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
     }
 
     private void setupGridView() {
         sanList = new ArrayList<>();
-        sanGridAdapter = new SanGridAdapter(this, sanList);
+        sanGridAdapter = new SanGridAdapter(this, sanList, userID);
         gridView.setAdapter(sanGridAdapter);
     }
 

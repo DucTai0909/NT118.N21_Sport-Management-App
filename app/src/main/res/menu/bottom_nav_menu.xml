@@ -10,5 +10,5 @@
         android:id="@+id/history"/>
     <item android:title="Thông tin"
         android:icon="@drawable/icon_person"
-        android:id="@+id/person"/>
+        android:id="@+id/bottom_khachhang_menu_info"/>
 </menu>

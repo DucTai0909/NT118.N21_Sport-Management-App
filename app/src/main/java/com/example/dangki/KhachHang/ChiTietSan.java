@@ -48,8 +48,8 @@ public class ChiTietSan extends AppCompatActivity {
     Date selectedStartDate,selectedEndDate;
     LocalTime selected_StartTime_final, selected_EndTime_final;
     int gioChoi=0;
-    double totalDb=0.0, stadium_price=0.0;
-    String sanId="";
+    double totalDb=0.0, gia_san=0.0;
+    String sanId="", img_url, tenSan, userID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,12 +68,12 @@ public class ChiTietSan extends AppCompatActivity {
             }
         });
 
-        tv_chonphut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBottomDialog();
-            }
-        });
+//        tv_chonphut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showBottomDialog();
+//            }
+//        });
 
         imv_anhsan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +90,13 @@ public class ChiTietSan extends AppCompatActivity {
             }
         });
 
-        btn_chonGio.setOnClickListener(new View.OnClickListener() {
+        btnDatSan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(ChiTietSan.this, CalendarActivity.class);
+                Intent intent= new Intent(getApplicationContext(), CalendarActivity.class);
                 intent.putExtra("idSan_intent", sanId);
-                intent.putExtra("stadium_price", Double.parseDouble(tv_giaSan.getText().toString()));
+                intent.putExtra("stadium_price", gia_san);
+                intent.putExtra("userID", userID);
                 startActivityForResult(intent, REQUEST_DATSAN_CODE);
             }
         });
@@ -136,52 +137,53 @@ public class ChiTietSan extends AppCompatActivity {
         return "";
     }
 
-    private void checkSanAvailability(String sanId, Date selectedStartTime, Date selectedEndTime) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-        // Chuyển đổi selectedStartTime và selectedEndTime từ định dạng chuỗi sang timestamp
-
-        firestore.collection("Stadium_Rental")
-                .whereEqualTo("stadium_id", sanId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult() != null && !task.getResult().isEmpty()) {
-                                boolean isBook= false;
-                                List<DocumentSnapshot> documents =task.getResult().getDocuments();
-                                for(DocumentSnapshot documentSnapshot : documents){
-                                    Date start_time = documentSnapshot.getDate("start_time");
-                                    Date end_time = documentSnapshot.getDate("end_time");
-                                    if(selectedStartTime.compareTo(start_time) >=0
-                                            && selectedStartTime.compareTo(end_time) <=0){
-                                        isBook = true;
-                                        Toast.makeText(ChiTietSan.this, "Đã có lịch đặt từ: "
-                                                + start_time.toString() +"  -  "+end_time.toString(),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else if (selectedEndTime.compareTo(start_time) >=0
-                                            && selectedEndTime.compareTo(end_time) <=0) {
-                                        isBook = true;
-                                        Toast.makeText(ChiTietSan.this, "Đã có lịch đặt từ: "
-                                                        + start_time.toString() +"  -  "+end_time.toString(),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                                if(isBook == false){
-                                    Toast.makeText(ChiTietSan.this, "Lịch trống: " , Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(ChiTietSan.this, "Đã xảy ra lỗi: " +
-                                        task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                task.getException().printStackTrace();
-                                Log.d("Lôi",task.getException().getMessage());
-                            }
-                    }
-                    }
-
-                });
-    }
+//    private void checkSanAvailability(String sanId, Date selectedStartTime, Date selectedEndTime) {
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//
+//        // Chuyển đổi selectedStartTime và selectedEndTime từ định dạng chuỗi sang timestamp
+//
+//        firestore.collection("Stadium_Rental")
+//                .whereEqualTo("stadium_id", sanId)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            if (task.getResult() != null && !task.getResult().isEmpty()) {
+//                                boolean isBook= false;
+//                                List<DocumentSnapshot> documents =task.getResult().getDocuments();
+//                                for(DocumentSnapshot documentSnapshot : documents){
+//                                    Date start_time = documentSnapshot.getDate("start_time");
+//                                    Date end_time = documentSnapshot.getDate("end_time");
+//                                    if(selectedStartTime.compareTo(start_time) >=0
+//                                            && selectedStartTime.compareTo(end_time) <=0){
+//                                        isBook = true;
+//                                        Toast.makeText(ChiTietSan.this, "Đã có lịch đặt từ: "
+//                                                + start_time.toString() +"  -  "+end_time.toString(),
+//                                                Toast.LENGTH_SHORT).show();
+//                                    } else if (selectedEndTime.compareTo(start_time) >=0
+//                                            && selectedEndTime.compareTo(end_time) <=0) {
+//                                        isBook = true;
+//                                        Toast.makeText(ChiTietSan.this, "Đã có lịch đặt từ: "
+//                                                        + start_time.toString() +"  -  "+end_time.toString(),
+//                                                Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                                if(isBook == false){
+//                                    Toast.makeText(ChiTietSan.this, "Lịch trống: " ,
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
+//                            } else {
+//                                Toast.makeText(ChiTietSan.this, "Đã xảy ra lỗi: " +
+//                                        task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                task.getException().printStackTrace();
+//                                Log.d("Lôi",task.getException().getMessage());
+//                            }
+//                    }
+//                    }
+//
+//                });
+//    }
 
     private void ShowDateTimePickerDialog() {
         Calendar calendar = Calendar.getInstance();
@@ -201,7 +203,8 @@ public class ChiTietSan extends AppCompatActivity {
 
                 if (selectedCalendar.before(Calendar.getInstance())) {
                     selectedCalendar = Calendar.getInstance();
-                    Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian trong quá khứ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian trong quá khứ",
+                            Toast.LENGTH_SHORT).show();
                 }
 
                 ShowTimePickerDialog(selectedCalendar);
@@ -221,7 +224,8 @@ public class ChiTietSan extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 if (hourOfDay >= 23 || hourOfDay < 5) {
-                    Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian từ 11PM đến 5AM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian từ 11PM đến 5AM",
+                            Toast.LENGTH_SHORT).show();
                     btnDatSan.setEnabled(false);
                     btnDatSan.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#C5C5C5")));
                 } else {
@@ -230,8 +234,10 @@ public class ChiTietSan extends AppCompatActivity {
                             selectedCalendar.get(Calendar.MONTH) == currentCalendar.get(Calendar.MONTH) &&
                             selectedCalendar.get(Calendar.DAY_OF_MONTH) == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
                         if (hourOfDay < currentCalendar.get(Calendar.HOUR_OF_DAY) ||
-                                (hourOfDay == currentCalendar.get(Calendar.HOUR_OF_DAY) && minute < currentCalendar.get(Calendar.MINUTE))) {
-                            Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian trong quá khứ của ngày hiện tại", Toast.LENGTH_SHORT).show();
+                                (hourOfDay == currentCalendar.get(Calendar.HOUR_OF_DAY)
+                                        && minute < currentCalendar.get(Calendar.MINUTE))) {
+                            Toast.makeText(ChiTietSan.this, "Không thể chọn thời gian " +
+                                    "trong quá khứ của ngày hiện tại", Toast.LENGTH_SHORT).show();
                             btnDatSan.setEnabled(false);
                             btnDatSan.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#C5C5C5")));
                             return;
@@ -265,30 +271,41 @@ public class ChiTietSan extends AppCompatActivity {
         imv_anhsan = findViewById(R.id.imv_khachhang_chitietsan_anhsan);
         btn_chonGio = findViewById(R.id.tv_khachhang_chitietsan_ChonGio);
         btnDatSan = findViewById(R.id.btn_khachhang_chitietsan_datsan);
-        sanId = getIntent().getStringExtra("idSan_intent");
     }
 
     private void LoadDuLieuSan() {
-        String sanId = getIntent().getStringExtra("idSan_intent");
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Stadium").document(sanId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    String idSan = documentSnapshot.getId();
-                    String tenSan = documentSnapshot.getString("name");
-                    double giaSan = documentSnapshot.getDouble("price");
-                    String img_url = documentSnapshot.getString("img_url");
-                    boolean isDelete = documentSnapshot.getBoolean("isDelete");
-                    San san = new San(idSan, img_url, tenSan, giaSan, isDelete);
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
+        sanId = intent.getStringExtra("idSan_intent");
+        gia_san = intent.getDoubleExtra("price", 0.0);
+        img_url = intent.getStringExtra("img_url");
+        tenSan = intent.getStringExtra("name");
 
-                    tv_tenSan.setText(tenSan);
-                    tv_giaSan.setText(String.valueOf(giaSan));
-                    Picasso.get().load(img_url).into(imv_anhsan);
-                    imv_anhsan.setTag(img_url);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(ChiTietSan.this, "Đã xảy ra lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                });
+        tv_tenSan.setText(tenSan);
+        tv_giaSan.setText(String.valueOf(gia_san));
+        Picasso.get().load(img_url).into(imv_anhsan);
+        imv_anhsan.setTag(img_url);
+
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//        firestore.collection("Stadium").document(sanId).get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    String idSan = documentSnapshot.getId();
+//                    String tenSan = documentSnapshot.getString("name");
+//                    double giaSan = documentSnapshot.getDouble("price");
+//                    String img_url = documentSnapshot.getString("img_url");
+//                    boolean isDelete = documentSnapshot.getBoolean("isDelete");
+//                    San san = new San(idSan, img_url, tenSan, giaSan, isDelete);
+//
+//                    tv_tenSan.setText(tenSan);
+//                    tv_giaSan.setText(String.valueOf(giaSan));
+//                    Picasso.get().load(img_url).into(imv_anhsan);
+//                    imv_anhsan.setTag(img_url);
+//                })
+//                .addOnFailureListener(e -> {
+//                    Toast.makeText(ChiTietSan.this, "Đã xảy ra lỗi: " + e.getMessage(),
+//                            Toast.LENGTH_SHORT).show();
+//                    e.printStackTrace();
+//                });
     }
 
     private void showBottomDialog() {

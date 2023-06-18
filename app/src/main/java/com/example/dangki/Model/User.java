@@ -5,42 +5,20 @@ import java.text.SimpleDateFormat;
 
 
 public class User {
-    String id, name, phoneNumber, gender, userName, email, photo, password;
+    String id, name, phoneNumber, gender, email, img_url, password, role_id;
     Date birthdate;
     public User(){}
 
-    public User(String id, String name, String phoneNumber, String gender, String userName,
-                String email, String photo, String password, Date birthdate) {
+    public User(String id, String name, String phoneNumber, String gender, String email,
+                String img_url, String password, String role_id, Date birthdate) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.userName = userName;
         this.email = email;
-        this.photo = photo;
+        this.img_url = img_url;
         this.password = password;
-        this.birthdate = birthdate;
-    }
-
-    public User(String name, String phoneNumber, String gender, String userName, Date birthdate,
-                String email, String password) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.userName = userName;
-        this.birthdate = birthdate;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String name, String phoneNumber, String gender, String userName, String email,
-                String photo, Date birthdate) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.userName = userName;
-        this.email = email;
-        this.photo = photo;
+        this.role_id = role_id;
         this.birthdate = birthdate;
     }
 
@@ -76,13 +54,7 @@ public class User {
         this.gender = gender;
     }
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public Date getBirthdate() {
         return birthdate;
@@ -96,8 +68,27 @@ public class User {
 
     public void setEmail(String email){this.email = email;}
 
-    public String getPhoto(){return this.photo;}
+    public String getImg_url() {
+        return img_url;
+    }
 
-    public void setPhoto(String photo){this.photo = photo;}
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(String role_id) {
+        this.role_id = role_id;
+    }
 }

@@ -6,239 +6,195 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <RelativeLayout
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-
-    <ImageView
-        android:id="@+id/imageNen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/mask_group" />
-
-    <ImageView
-        android:id="@+id/imageIcon"
-        android:layout_width="128dp"
+    android:layout_height="match_parent">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imv_khachhang_dangky"
+        android:layout_width="138dp"
         android:layout_height="138dp"
-        android:layout_alignStart="@id/imageNen"
-        android:layout_alignTop="@id/imageNen"
-        android:layout_marginStart="151dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        app:srcCompat="@drawable/icondn" />
-
-    <TextView
-        android:id="@+id/txtUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/imageIcon"
-        android:layout_alignBottom="@id/imageIcon"
-        android:layout_marginStart="-119dp"
-        android:layout_marginBottom="-44dp"
-        android:textColor="#7C7C7C"
-        android:text="User name"
-        android:textStyle="italic" />
-
-
-    <EditText
-        android:id="@+id/UserName"
-        android:layout_width="332dp"
-        android:layout_height="40dp"
-        android:layout_alignStart="@id/txtUserName"
-        android:layout_alignBottom="@id/txtUserName"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="-49dp"
-        android:background="@drawable/edittext_bg"
-        android:hint="ductai09"
-        android:padding="4dp"
-        android:textStyle="italic" />
-
-    <TextView
-        android:id="@+id/txtHoTen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/editTextPass"
-        android:layout_alignBottom="@id/UserName"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="-113dp"
-        android:text="Họ và tên"
-        android:textColor="#7C7C7C"
-        android:textStyle="italic" />
-
-    <EditText
-        android:id="@+id/HoTen"
-        android:layout_width="329dp"
-        android:layout_height="34dp"
-        android:layout_alignStart="@id/txtHoTen"
-        android:layout_alignBottom="@id/txtHoTen"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-44dp"
-        android:background="@drawable/edittext_bg"
-        android:hint="Nguyễn Văn A"
-        android:textStyle="italic" />
-
-    <TextView
-        android:id="@+id/txtPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/UserName"
-        android:layout_alignBottom="@id/UserName"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-31dp"
-        android:textColor="#7C7C7C"
-        android:text="Password" />
-
-    <EditText
-        android:id="@+id/editTextPass"
-        android:layout_width="332dp"
-        android:layout_height="40dp"
-        android:layout_alignStart="@id/txtPass"
-        android:layout_alignBottom="@id/txtPass"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-54dp"
-        android:background="@drawable/edittext_bg"
-        android:ems="10"
-        android:inputType="textPassword" />
-
-    <TextView
-        android:id="@+id/textSdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/HoTen"
-        android:layout_alignBottom="@id/HoTen"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-37dp"
-        android:textColor="#7C7C7C"
-        android:text="Số điện thoại"
-        android:textStyle="italic" />
-
-    <EditText
-        android:id="@+id/editTextSdt"
-        android:layout_width="332dp"
-        android:layout_height="40dp"
-        android:layout_alignStart="@id/textSdt"
-        android:layout_alignBottom="@id/textSdt"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="-54dp"
-        android:background="@drawable/edittext_bg"
-        android:ems="10"
-        android:inputType="phone" />
+        android:src="@drawable/profile" />
 
     <TextView
         android:id="@+id/txtEmail"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/editTextSdt"
-        android:layout_alignBottom="@id/editTextSdt"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="-33dp"
+        android:layout_below="@id/imv_khachhang_dangky"
         android:textColor="#7C7C7C"
         android:text="Email" />
 
     <EditText
         android:id="@+id/editTextEmail"
+        android:layout_centerHorizontal="true"
         android:layout_width="332dp"
         android:layout_height="40dp"
-        android:layout_alignStart="@id/txtEmail"
-        android:layout_alignBottom="@id/txtEmail"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="-53dp"
+        android:layout_below="@id/txtEmail"
+        android:layout_marginTop="10dp"
         android:background="@drawable/edittext_bg"
         android:ems="10"
         android:inputType="textEmailAddress" />
 
     <TextView
-        android:id="@+id/txtGioiTinh"
+        android:id="@+id/txtPass"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/editTextEmail"
-        android:layout_alignBottom="@id/editTextEmail"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="-40dp"
-        android:text="Giới tính"
+        android:layout_below="@id/editTextEmail"
         android:textColor="#7C7C7C"
-        android:textStyle="italic" />
+        android:text="Password" />
 
+    <EditText
+        android:id="@+id/editTextPass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/txtPass"
+        android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:inputType="textPassword" />
     <TextView
-        android:id="@+id/txtNgaySinh"
+        android:id="@+id/txtHoTen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/txtGioiTinh"
-        android:layout_alignBottom="@id/txtGioiTinh"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-74dp"
-        android:text="Ngày sinh"
+        android:layout_marginTop="20dp"
+
+        android:layout_below="@id/editTextPass"
+        android:text="Họ và tên"
+        android:layout_marginLeft="20dp"
         android:textColor="#7C7C7C"
         android:textStyle="italic" />
 
     <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="332dp"
-        android:layout_height="40dp"
-        android:layout_alignStart="@id/txtNgaySinh"
-        android:layout_alignBottom="@id/txtNgaySinh"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="-64dp"
-        android:background="@drawable/edittext_bg"
-        android:ems="10"
-        android:inputType="date"
-        android:focusableInTouchMode="false"/>
+        android:id="@+id/HoTen"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
 
+        android:layout_width="329dp"
+        android:layout_height="34dp"
+        android:layout_below="@id/txtHoTen"
+        android:background="@drawable/edittext_bg"
+        android:hint="Nguyễn Văn A"
+        android:textStyle="italic" />
+
+
+
+    <TextView
+        android:id="@+id/txtGioiTinh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/HoTen"
+        android:layout_marginTop="20dp"
+        android:text="Giới tính"
+        android:textColor="#7C7C7C"
+        android:layout_marginLeft="20dp"
+        android:textStyle="italic" />
     <RadioGroup
         android:id="@+id/genderRadio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/txtGioiTinh"
-        android:layout_alignBottom="@id/txtNgaySinh"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/txtGioiTinh"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/radioBtNam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="73dp"
-            android:layout_marginBottom="27dp"
+
             android:text="Nam" />
         <RadioButton
             android:id="@+id/radioBtNu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="83dp"
-            android:layout_marginBottom="26dp"
+            android:layout_marginLeft="40dp"
             android:text="Nữ" />
     </RadioGroup>
+    <TextView
+        android:id="@+id/textSdt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/genderRadio"
+        android:textColor="#7C7C7C"
+        android:layout_marginTop="20dp"
 
+        android:text="Số điện thoại"
+        android:layout_marginLeft="20dp"
+
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextSdt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/textSdt"
+        android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:inputType="phone" />
+    <TextView
+        android:id="@+id/txtNgaySinh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextSdt"
+        android:text="Ngày sinh"
+        android:textColor="#7C7C7C"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_centerHorizontal="true"
+        android:layout_width="332dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/txtNgaySinh"
+        android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:inputType="date"
+        android:focusableInTouchMode="false"/>
 
     <Button
         android:id="@+id/btDangKi"
+        android:layout_marginTop="40dp"
         android:layout_width="332dp"
         android:layout_height="40dp"
-        android:layout_alignStart="@id/editTextDate"
-        android:layout_alignBottom="@id/editTextDate"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="-57dp"
-        android:background="@drawable/round_button"
+        android:layout_below="@id/editTextDate"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_btn_google"
+        app:backgroundTint="@color/green"
         android:text="Đăng kí" />
 
     <TextView
         android:id="@+id/txtCoTK"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/btDangKi"
-        android:layout_alignBottom="@id/btDangKi"
-        android:layout_marginStart="59dp"
-        android:layout_marginBottom="-40dp"
+        android:layout_below="@id/btDangKi"
         android:text="Bạn đã có tài khoản?"
+        android:layout_centerHorizontal="true"
         android:textColor="#7C7C7C"
         android:textStyle="italic" />
 
     <TextView
         android:id="@+id/txtDangNhap"
         android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="13dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/btDangKi"
-        android:layout_alignBottom="@id/btDangKi"
-        android:layout_marginStart="198dp"
-        android:layout_marginBottom="-38dp"
+        android:layout_below="@id/btDangKi"
+        android:layout_toRightOf="@id/txtCoTK"
+        android:layout_marginLeft="5dp"
         android:text="Đăng nhập"
         android:textColor="#3cb721"
         android:textStyle="italic" />

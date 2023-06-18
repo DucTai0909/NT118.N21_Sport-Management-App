@@ -54,6 +54,9 @@
         <activity android:name=".Calendar.DailyCalendarActivity"/>
         <activity android:name=".KhachHang.DatLichThanhCong"/>
 
+<!--        Thông tin user-->
+        <activity android:name=".KhachHang.ThongTinUser"/>
+
     </application>
 
 </manifest>

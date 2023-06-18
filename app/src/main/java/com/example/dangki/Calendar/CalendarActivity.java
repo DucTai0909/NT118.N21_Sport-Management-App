@@ -39,13 +39,13 @@ import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity  implements CalendarAdapter.OnItemListener{
     static int REQUEST_DATSAN_CODE =1;
-    static final int RESULT_DATSAN_SUCCESS =2;
+
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     LocalTime selected_StartTime_final, selected_EndTime_final;
     int gioChoi=0;
     double totalDb=0.0, stadium_price=0.0;
-    String sanID="", rentalID="";
+    String sanID="", rentalID="", userID;
     double san_price=0.0;
 
     @Override
@@ -65,8 +65,10 @@ public class CalendarActivity extends AppCompatActivity  implements CalendarAdap
     {
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
         monthYearText = findViewById(R.id.monthYearTV);
+
         sanID = getIntent().getStringExtra("idSan_intent");
         san_price = getIntent().getDoubleExtra("stadium_price", 0.0);
+        userID = getIntent().getStringExtra("userID");
     }
 
     private void setMonthView()
@@ -96,6 +98,7 @@ public class CalendarActivity extends AppCompatActivity  implements CalendarAdap
     public void onItemClick(int position, LocalDate date)
     {
         Intent intent= new Intent(CalendarActivity.this, DailyCalendarActivity.class);
+        intent.putExtra("userID", userID);
         intent.putExtra("idSan_intent", sanID);
         intent.putExtra("stadium_price", san_price);
         CalendarUtils.selectedDate = date;
@@ -106,18 +109,19 @@ public class CalendarActivity extends AppCompatActivity  implements CalendarAdap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_DATSAN_CODE && resultCode ==1){
-            totalDb =data.getDoubleExtra("totalDb", 0.0);
-            selected_StartTime_final = LocalTime.parse(data.getStringExtra("start_time"));
-            selected_StartTime_final = LocalTime.parse(data.getStringExtra("end_time"));
-            gioChoi = data.getIntExtra("rental_time", 0);
-
-            Intent intent = new Intent();
-            intent.putExtra("totalDb", totalDb);
-            intent.putExtra("start_time", selected_StartTime_final.toString());
-            intent.putExtra("end_time", selected_EndTime_final.toString());
-            intent.putExtra("rental_time", gioChoi);
-            setResult(RESULT_DATSAN_SUCCESS, intent);
+        if(requestCode == REQUEST_DATSAN_CODE && resultCode ==2){
+//            totalDb =data.getDoubleExtra("totalDb", 0.0);
+//            selected_StartTime_final = LocalTime.parse(data.getStringExtra("start_time"));
+//            selected_StartTime_final = LocalTime.parse(data.getStringExtra("end_time"));
+//            gioChoi = data.getIntExtra("rental_time", 0);
+//
+//            Intent intent = new Intent();
+//            intent.putExtra("totalDb", totalDb);
+//            intent.putExtra("start_time", selected_StartTime_final.toString());
+//            intent.putExtra("end_time", selected_EndTime_final.toString());
+//            intent.putExtra("rental_time", gioChoi);
+//            setResult(RESULT_DATSAN_SUCCESS, intent);
+//            finish();
             finish();
         }
     }
