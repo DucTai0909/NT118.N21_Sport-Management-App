@@ -123,7 +123,9 @@ public class ChonSan extends AppCompatActivity {
                 case R.id.bottom_khachhang_home:
                     return true;
                 case R.id.bottom_khachhang_menu_info:
-                    startActivity(new Intent(getApplicationContext(), ThongTinUser.class));
+                    Intent intent= new Intent(getApplicationContext(), ThongTinUser.class);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
                     finish();
                     return true;
             }

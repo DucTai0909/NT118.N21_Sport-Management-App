@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ThongTinUser extends AppCompatActivity {
     Button btn_logout;
     BottomNavigationView bottomNavigationView;
+    String userID;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,8 @@ public class ThongTinUser extends AppCompatActivity {
     private void FindViewByIds() {
         btn_logout = findViewById(R.id.btn_khachhang_userinfo_logout);
         bottomNavigationView = findViewById(R.id.bottom_khachhang_info);
+
+        userID = getIntent().getStringExtra("userID");
     }
     private void BottomNavigation() {
         bottomNavigationView.setSelectedItemId(R.id.bottom_khachhang_menu_info);
@@ -68,7 +71,9 @@ public class ThongTinUser extends AppCompatActivity {
                 case R.id.bottom_khachhang_menu_info:
                     return true;
                 case R.id.bottom_khachhang_home:
-                    startActivity(new Intent(getApplicationContext(), ChonSan.class));
+                    Intent intent= new Intent(getApplicationContext(), ChonSan.class);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
                     finish();
                     return true;
             }

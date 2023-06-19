@@ -57,6 +57,8 @@
 <!--        Thông tin user-->
         <activity android:name=".KhachHang.ThongTinUser"/>
 
+<!--        Thanh toán-->
+        <activity android:name=".KhachHang.ThanhToan"/>
     </application>
 
 </manifest>

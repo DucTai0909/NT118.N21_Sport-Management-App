@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -64,6 +65,16 @@ public class ChonDoUong extends AppCompatActivity {
             }
         });
 
+        btnDatlich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ThanhToan.class);
+                intent.putExtra("rentalID", rentalID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -75,7 +86,7 @@ public class ChonDoUong extends AppCompatActivity {
     private void FindViewByIds() {
         searchView = findViewById(R.id.searchView_khachhang_chondouong);
         gridView = findViewById(R.id.gridView_khachhang_chondouong);
-        btnDatlich = findViewById(R.id.btn_khachhang_chonsan);
+        btnDatlich = findViewById(R.id.btn_khachhang_tienhanhDatLich);
 
         rentalID = getIntent().getStringExtra("rentalID");
         userID = getIntent().getStringExtra("userID");
