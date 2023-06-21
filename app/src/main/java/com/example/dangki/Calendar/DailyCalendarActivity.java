@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -538,17 +539,32 @@ public class DailyCalendarActivity extends AppCompatActivity
                     // Giờ hợp lệ, tiếp tục xử lý
                     // ...
                     selected_StartTime_final = selectedTime;
-                    showBottomDialog();
+                    ShowBottomDialog();
                 }
             }
         }, 0, 0, false);
 
         timePickerDialog.show();
     }
-    private void showBottomDialog() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(DailyCalendarActivity.this);
+    private void ShowBottomDialog() {
+        Dialog bottomSheetDialog = new Dialog(DailyCalendarActivity.this);
 //        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         bottomSheetDialog.setContentView(R.layout.bottom_chonphut);
+        // Đặt các thuộc tính của dialog
+        Window dialogWindow = bottomSheetDialog.getWindow();
+        if (dialogWindow != null) {
+            // Đặt độ trasparent cho nền của dialog
+            dialogWindow.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            // Đặt độ trasparent cho phần nền trên cùng của dialog (bo góc trên)
+            dialogWindow.setDimAmount(0.5f);
+
+            // Đặt các thuộc tính về kích thước và vị trí
+            WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
+            layoutParams.gravity = Gravity.BOTTOM; // Hiển thị ở dưới cùng
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT; // Chiều rộng tối đa
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT; // Chiều cao tự động
+            dialogWindow.setAttributes(layoutParams);
+        }
 
         NumberPicker numberPicker = bottomSheetDialog.findViewById(R.id.numberpicker_khachhang_chitietsan_sophut);
         Button btnHuy = bottomSheetDialog.findViewById(R.id.btn_khachhang_chitietsan_huy);

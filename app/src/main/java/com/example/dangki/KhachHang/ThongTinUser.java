@@ -76,6 +76,12 @@ public class ThongTinUser extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                     return true;
+                case R.id.bottom_khachhang_history:
+                    Intent intent1= new Intent(getApplicationContext(), ThongTinDatLich.class);
+                    intent1.putExtra("userID", userID);
+                    startActivity(intent1);
+                    finish();
+                    return true;
             }
             return false;
         });

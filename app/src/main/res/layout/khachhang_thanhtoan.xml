@@ -66,7 +66,7 @@
             android:drawableStart="@drawable/ic_cash"/>
 
         <RadioButton
-            android:id="@+id/radioButton_bankTransfer"
+            android:id="@+id/radioButton_zalo"
             android:layout_width="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"

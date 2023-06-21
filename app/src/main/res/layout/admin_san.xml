@@ -26,13 +26,16 @@
 
         <SearchView
             android:id="@+id/search_admin_san"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/ln_admin_san"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="19dp"
             android:layout_marginRight="3dp"
             android:hint="Tên sân"
+            android:background="@drawable/bg_btn_google"
+            android:backgroundTint="#C5C5C5"
             android:iconifiedByDefault="false"
             android:queryHint="Tên sân" />
 

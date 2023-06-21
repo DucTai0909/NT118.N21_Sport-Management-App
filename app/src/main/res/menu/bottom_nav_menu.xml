@@ -7,7 +7,7 @@
         android:id="@+id/bottom_khachhang_home"/>
     <item android:title="Lịch sử đặt sân"
         android:icon="@drawable/icon_history"
-        android:id="@+id/history"/>
+        android:id="@+id/bottom_khachhang_history"/>
     <item android:title="Thông tin"
         android:icon="@drawable/icon_person"
         android:id="@+id/bottom_khachhang_menu_info"/>

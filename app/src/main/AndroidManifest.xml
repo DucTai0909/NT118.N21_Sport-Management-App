@@ -37,7 +37,6 @@
         <activity android:name=".KhachHang.ChiTietSan"></activity>
         <activity android:name=".KhachHang.ChonDoUong"></activity>
         <activity android:name=".KhachHang.ChiTietDoUong"></activity>
-        <activity android:name=".KhachHang.ThongTinDatLich"></activity>
         <activity android:name=".Admin.KhachHang.Menu"></activity>
         <activity android:name=".Admin.San.Menu"/>
         <activity android:name=".Admin.Douong.Menu"/>
@@ -58,7 +57,22 @@
         <activity android:name=".KhachHang.ThongTinUser"/>
 
 <!--        Thanh toán-->
-        <activity android:name=".KhachHang.ThanhToan"/>
-    </application>
+        <activity android:name=".KhachHang.ThanhToan"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="demozpdk"
+                android:host="app" />
+        </intent-filter>
+    </activity>
+
+<!--        Thông tin đặt lịch-->
+        <activity android:name=".KhachHang.ThongTinDatLich"/>
+
+</application>
 
 </manifest>
