@@ -73,6 +73,8 @@
 <!--        Thông tin đặt lịch-->
         <activity android:name=".KhachHang.ThongTinDatLich"/>
 
+        <activity android:name=".KhachHang.ChiTietDatLich"/>
+
 </application>
 
 </manifest>

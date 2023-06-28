@@ -73,6 +73,16 @@ public class ThongTinDatLichAdapter extends RecyclerView.Adapter<ThongTinDatLich
             tv_trangthai = itemView.findViewById(R.id.tv_khachhang_lichsu_item_trangthai);
             tv_tensan = itemView.findViewById(R.id.tv_khachang_lichsu_item_tensan);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && listener != null){
+                        listener.onItemClick(thongTinDatLichModelList.get(position));
+                    }
+                }
+            });
+
         }
         public void bind(ThongTinDatLichModel thongTinDatLichModel){
             tv_tensan.setText(thongTinDatLichModel.getName());

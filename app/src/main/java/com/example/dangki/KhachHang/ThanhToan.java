@@ -269,8 +269,6 @@ public class ThanhToan extends AppCompatActivity {
                         }
                     });
 
-
-
             // Chờ hoàn thành của cả ba hàm bất đồng bộ
 
     }

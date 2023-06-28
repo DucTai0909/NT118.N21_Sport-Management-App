@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -49,6 +51,7 @@ public class ThongTinDatLich extends AppCompatActivity {
     FloatingActionButton btn_filter;
     String userID;
     List<ThongTinDatLichModel> thongTinDatLichModelList;
+    ImageView btn_nofilter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +71,31 @@ public class ThongTinDatLich extends AppCompatActivity {
                 ShowBottomDialog();
             }
         });
+
+        btn_nofilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                thongTinDatLichAdapter.setThongTinDatLichList(thongTinDatLichModelList);
+                btn_nofilter.setVisibility(View.GONE);
+            }
+        });
+        thongTinDatLichAdapter.setOnItemClickListener(new ThongTinDatLichAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ThongTinDatLichModel thongTinDatLichModel) {
+                Intent intent = new Intent(ThongTinDatLich.this, ChiTietDatLich.class);
+                intent.putExtra("rentalID", thongTinDatLichModel.getRentalID());
+                intent.putExtra("status", thongTinDatLichModel.getStatus());
+                startActivityForResult(intent, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1 && resultCode ==1){
+            LoadData();
+        }
     }
 
     private void ShowBottomDialog() {
@@ -75,6 +103,9 @@ public class ThongTinDatLich extends AppCompatActivity {
 
         // Đặt layout cho dialog
         bottomDialog.setContentView(R.layout.bottom_khachhang_lichsu_filter);
+
+        RadioGroup radioGroup = bottomDialog.findViewById(R.id.radiogr_khachang_lichsu_filter);
+        Button filter_btn = bottomDialog.findViewById(R.id.btn_khachhang_lichsu_filter);
 
         // Đặt các thuộc tính của dialog
         Window dialogWindow = bottomDialog.getWindow();
@@ -92,6 +123,43 @@ public class ThongTinDatLich extends AppCompatActivity {
             dialogWindow.setAttributes(layoutParams);
         }
 
+        filter_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int selectedRadio = radioGroup.getCheckedRadioButtonId();
+                List<ThongTinDatLichModel> filteredList = new ArrayList<>();
+
+                switch (selectedRadio){
+                    case R.id.radio_booking:
+                        for(ThongTinDatLichModel item : thongTinDatLichModelList){
+                            if(item.getStatus().equals("Booking")){
+                                filteredList.add(item);
+                            }
+                        }
+                        break;
+                    case R.id.radio_booked:
+                        for(ThongTinDatLichModel item : thongTinDatLichModelList){
+                            if(item.getStatus().equals("Booked")){
+                                filteredList.add(item);
+                            }
+                        }
+                        break;
+                    case R.id.radio_done:
+                        for(ThongTinDatLichModel item : thongTinDatLichModelList){
+                            if(item.getStatus().equals("Done")){
+                                filteredList.add(item);
+                            }
+                        }
+                        break;
+                    default:
+                        filteredList.addAll(thongTinDatLichModelList);
+                        break;
+                }
+                thongTinDatLichAdapter.setThongTinDatLichList(filteredList);
+                btn_nofilter.setVisibility(View.VISIBLE);
+                bottomDialog.dismiss();
+            }
+        });
         // Hiển thị dialog
         bottomDialog.show();
     }
@@ -130,7 +198,7 @@ public class ThongTinDatLich extends AppCompatActivity {
                                                     String name = documentSnapshot2.getString("name");
 
                                                     ThongTinDatLichModel thongTinDatLichModel =
-                                                            new ThongTinDatLichModel(img_url,
+                                                            new ThongTinDatLichModel(rentalID, img_url,
                                                             name, status, start_time, end_time);
                                                     thongTinDatLichModelList.add(thongTinDatLichModel);
 
@@ -227,6 +295,7 @@ public class ThongTinDatLich extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_khachhang_lichsu);
         recyclerView = findViewById(R.id.rcv_khachhang_lichsu);
         btn_filter = findViewById(R.id.btn_khachhang_lichsu_btnfilter);
+        btn_nofilter = findViewById(R.id.btn_khachhang_lichsu_nofilter);
 
         userID = getIntent().getStringExtra("userID");
     }

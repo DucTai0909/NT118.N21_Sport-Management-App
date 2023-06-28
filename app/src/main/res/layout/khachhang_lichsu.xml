@@ -32,12 +32,23 @@
             android:textColor="@color/black"
             android:textSize="23dp" />
 
+        <ImageView
+            android:id="@+id/btn_khachhang_lichsu_nofilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_khachhang_lichsu_tieude"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_nofilter" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_khachhang_lichsu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/tv_khachhang_lichsu_tieude">
+            android:layout_below="@id/btn_khachhang_lichsu_nofilter">
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
