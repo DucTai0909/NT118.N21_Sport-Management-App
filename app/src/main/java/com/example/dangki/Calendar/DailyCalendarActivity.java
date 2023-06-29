@@ -216,11 +216,12 @@ public class DailyCalendarActivity extends AppCompatActivity
         WriteBatch batch = db.batch();
 
         // Dữ liệu cần thêm vào bảng Rental
-        double total_add = totalDb + (stadium_price / 60) * gioChoi;
+        double total_add = (stadium_price / 60) * gioChoi;
+        int total_add_int = (int) total_add;
 
         Map<String, Object> rentalData = new HashMap<>();
         rentalData.put("date", Timestamp.now());
-        rentalData.put("total", total_add);
+        rentalData.put("total", total_add_int);
         rentalData.put("user_id", userID);
         rentalData.put("status", "Booking");
 
@@ -282,36 +283,6 @@ public class DailyCalendarActivity extends AppCompatActivity
         }
     }
 
-    //    void FirstAddToDb(DataCallback callback){
-//        Date start_time_add_to_db = new Date();
-//        Date end_time_add_to_db = new Date();
-//        start_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_StartTime_final);
-//        end_time_add_to_db = ConvertLocalDateTimeToDate(selectedDate, selected_EndTime_final);
-//
-//        Map<String, Object> stadiumRentalData = new HashMap<>();
-//        stadiumRentalData.put("rental_id", rentalID);
-//        stadiumRentalData.put("stadium_id", sanID);
-////        stadiumRentalData.put("stadium_id", 1);
-//        stadiumRentalData.put("start_time", start_time_add_to_db);
-//        stadiumRentalData.put("end_time", end_time_add_to_db);
-//        stadiumRentalData.put("rental_time", gioChoi);
-//
-//        FirebaseFirestore db =FirebaseFirestore.getInstance();
-//        db.collection("Stadium_Rental").add(stadiumRentalData)
-//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentReference> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentReference document = task.getResult();
-//                            callback.onSuccess(true);
-//
-////                            progressBar.setVisibility(View.GONE);
-////                            Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
-
 
     /*
     Hàm này dùng để check xem liệu khách hàng này có đang Booking hay không
@@ -365,13 +336,6 @@ public class DailyCalendarActivity extends AppCompatActivity
         userID = intent.getStringExtra("userID");
     }
 
-//    @Override
-//    protected void onResume()
-//    {
-//        super.onResume();
-////        GetData();
-////        setDayView();
-//    }
 
     private void setDayView()
     {
@@ -602,6 +566,12 @@ public class DailyCalendarActivity extends AppCompatActivity
 
                     if (selected_EndTime_LocalTime.isAfter(start_Time_db) &&
                             selected_EndTime_LocalTime.isBefore(end_Time_db)) {
+                        isBetween = true;
+                        break;
+                    } else if ((selected_StartTime_final.isBefore(start_Time_db) ||
+                                selected_StartTime_final.equals(start_Time_db))
+                            && (selected_EndTime_LocalTime.isAfter(end_Time_db) ||
+                                selected_EndTime_LocalTime.equals(end_Time_db))) {
                         isBetween = true;
                         break;
                     }

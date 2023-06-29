@@ -421,6 +421,8 @@ public class Register extends AppCompatActivity {
                     String uPhone = phoneNumber.getText().toString().trim();
                     if (TextUtils.isEmpty(uPhone)) {
                         phoneNumber.setError("Số điện thoại không được bỏ trống");
+                    } else if (uPhone.length() <10 || uPhone.length() > 10) {
+                        phoneNumber.setError("SĐT phải là 10 số");
                     }
                 }
             }
@@ -451,6 +453,9 @@ public class Register extends AppCompatActivity {
             return false;
         }else if(TextUtils.isEmpty(uName)){
             fullName.setError("Họ tên không được trống");
+            return false;
+        } else if (uPhone.length() <10 || uPhone.length() >10) {
+            phoneNumber.setError("SĐT phải là 10 số");
             return false;
         }
         return true;

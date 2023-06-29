@@ -6,37 +6,22 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_logOut"
-        app:backgroundTint="@null"
+        android:id="@+id/btn_admin_userinfo_logOut"
         android:layout_width="331dp"
         android:layout_height="50dp"
-
-        android:text="Đăng xuất"
-        android:textColor="#53B175"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:drawableLeft="@drawable/ic_logout"
         android:background="@drawable/bg_logout"
+        android:drawableLeft="@drawable/ic_logout"
+        android:text="Đăng xuất"
         android:textAllCaps="false"
-        android:layout_marginBottom="13dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#53B175"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_admin_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -169,16 +154,15 @@
                                 android:textColor="@color/black">
                             </TextView>
                         </RelativeLayout>
-
                     </androidx.cardview.widget.CardView>
-
-
-
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_admin_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/admin_nav" />
 
-        </LinearLayout>
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

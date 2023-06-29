@@ -75,6 +75,10 @@
 
         <activity android:name=".KhachHang.ChiTietDatLich"/>
 
+        <activity android:name=".Admin.UserInfo"/>
+
+        <activity android:name=".Admin.KhachHang.CapNhatKhachHang"/>
+
 </application>
 
 </manifest>

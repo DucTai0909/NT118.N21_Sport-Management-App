@@ -71,11 +71,12 @@ public class ChonDoUong extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ThanhToan.class);
                 intent.putExtra("rentalID", rentalID);
                 intent.putExtra("userID", userID);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
     }
+
 
     @Override
     protected void onResume() {

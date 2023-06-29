@@ -1,10 +1,11 @@
 package com.example.dangki.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
 
-public class User {
+public class User implements Serializable {
     String id, name, phoneNumber, gender, email, img_url, password, role_id;
     Date birthdate;
     public User(){}

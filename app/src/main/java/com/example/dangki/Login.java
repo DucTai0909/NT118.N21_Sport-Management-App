@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.dangki.Admin.Douong.Menu;
+import com.example.dangki.Admin.KhachHang.Menu;
 import com.example.dangki.KhachHang.ChonSan;
 import com.example.dangki.KhachHang.DatSan;
 import com.example.dangki.Model.User;
@@ -240,7 +240,9 @@ public class Login extends AppCompatActivity {
                         // Người dùng đã tồn tại trong Firestore
                         // Thực hiện các hành động cần thiết sau khi đăng nhập bằng Google
                         Toast.makeText(Login.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), ChonSan.class));
+                        Intent intent = new Intent(getApplicationContext(), ChonSan.class);
+                        intent.putExtra("userID", dbUser.getId());
+                        startActivity(intent);
                         finish();
                     } else {
                         // Người dùng chưa tồn tại trong Firestore

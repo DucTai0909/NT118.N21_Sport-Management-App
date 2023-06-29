@@ -92,9 +92,9 @@
         android:textSize="20dp"
         android:textStyle="bold"
         android:layout_below="@id/radioGroup_paymentMethod"
-        android:layout_toRightOf="@id/tv_khachhang_thanhtoan_tongtien"
         android:textColor="@color/red"
-        android:layout_marginLeft="150dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"/>
     <Button
         android:id="@+id/btn_khachhang_thanhtoan"
@@ -112,10 +112,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
         android:text="hủy"
+        android:visibility="gone"
         android:background="@drawable/bg_btn_google"
         android:layout_below="@id/btn_khachhang_thanhtoan"
         app:backgroundTint="@color/red"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
-
+    <ProgressBar
+        android:id="@+id/progressBar_khachhang_thanhtoan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 </RelativeLayout>

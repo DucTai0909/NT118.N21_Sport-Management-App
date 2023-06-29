@@ -10,6 +10,7 @@
     android:layout_marginTop="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imv_admin_khachhang_anh"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginTop="10dp"
@@ -32,18 +33,19 @@
             android:textSize="18dp"/>
 
         <TextView
+            android:id="@+id/tv_admin_khachhang_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_admin_khachhang_fullname"
             android:layout_marginTop="7dp"
-            android:text="0352330676"
+            android:text="nguyentoductai@gmail.com"
             android:textColor="#55c63f" />
     </RelativeLayout>
 
-    <ImageButton
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="10dp"
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:textSize="16dp"
         android:textColor="#ff002a"

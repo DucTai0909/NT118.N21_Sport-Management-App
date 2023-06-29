@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class ThanhToan extends AppCompatActivity {
     Button btn_pay;
     RadioGroup radioGroup_phuongthuc;
     RadioButton radioButtonCash, radioButtonZalo;
-
+    ProgressBar progressBar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +78,12 @@ public class ThanhToan extends AppCompatActivity {
             }
         });
 
+        btn_pay.setEnabled(false);
+        btn_pay.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.gray));
         radioGroup_phuongthuc.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                if (checkedId == -1) {
+                if (checkedId == 0) {
                     // Không có radio nào được chọn
                     btn_pay.setEnabled(false);
                     btn_pay.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),
@@ -105,7 +108,8 @@ public class ThanhToan extends AppCompatActivity {
                         if(radioButtonZalo.isChecked()){
                             ThanhToanZalo();
                         } else if (radioButtonCash.isChecked()) {
-                            startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                            progressBar.setVisibility(View.VISIBLE);
+                            UpdateStatus("Booked");
                         }
                     }
                 });
@@ -138,7 +142,7 @@ public class ThanhToan extends AppCompatActivity {
                         new PayOrderListener() {
                             @Override
                             public void onPaymentSucceeded(String s, String s1, String s2) {
-                                UpdateStatus();
+                                UpdateStatus("Done");
                             }
 
                             @Override
@@ -158,11 +162,11 @@ public class ThanhToan extends AppCompatActivity {
         }
     }
 
-    private void UpdateStatus() {
+    private void UpdateStatus(String status) {
         FirebaseFirestore db= FirebaseFirestore.getInstance();
 
         Map<String, Object> updateData = new HashMap<>();
-        updateData.put("status", "Done");
+        updateData.put("status", status);
 
         db.collection("Rental")
                 .document(rentalID)
@@ -171,9 +175,11 @@ public class ThanhToan extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(ThanhToan.this, "Thanh toán thành công",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ThanhToan.this, "Lịch đặt của bạn đã được hệ" +
+                                    " thống ghi nhận", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(ThanhToan.this, ChonSan.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("userID", userID);
                             startActivity(intent);
                             finish();
@@ -292,6 +298,7 @@ public class ThanhToan extends AppCompatActivity {
         btn_goback = findViewById(R.id.btn_khachhang_thanhtoan_goback);
         tv_tongTien = findViewById(R.id.tv_khachhang_thanhtoan_tongtien2);
         recyclerView = findViewById(R.id.rcv_khachhang_thanhtoan);
+        progressBar = findViewById(R.id.progressBar_khachhang_thanhtoan);
 
         userID = getIntent().getStringExtra("userID");
         rentalID = getIntent().getStringExtra("rentalID");

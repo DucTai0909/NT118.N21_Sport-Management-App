@@ -31,10 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
-
-import io.grpc.Context;
-
 public class ThemDoUong extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     static final int RESULT_ADD_SUCCESS = 2;
@@ -158,7 +154,7 @@ public class ThemDoUong extends AppCompatActivity {
     private void findViewByIds() {
         btn_goback = findViewById(R.id.btn_admin_douong_themdouong_goback);
         img_chooser = findViewById(R.id.img_chooser);
-        edt_gia = findViewById(R.id.edt_admin_douong_themdouong_gia);
+        edt_gia = findViewById(R.id.edt_admin_khachhang_info_email);
         edt_sl = findViewById(R.id.edt_admin_douong_themdouong_sl);
         edt_ten = findViewById(R.id.edt_admin_douong_themdouong_tendouong);
         btn_themDoUong = findViewById(R.id.btn_admin_douong_themdouong_add);
