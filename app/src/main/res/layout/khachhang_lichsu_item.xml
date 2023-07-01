@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="13:00 - 14:00 "
                 android:layout_below="@id/tv_khachang_lichsu_item_tensan"
-                android:textColor="@color/black"
+                android:textColor="@color/green"
                 android:layout_marginTop="7dp"/>
 
         </RelativeLayout>

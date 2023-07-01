@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/progressBar_khachhang_lichsu"
+        android:id="@+id/progressBar_admin_datlich_chitiet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,11 +59,11 @@
         android:textStyle="bold"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_khachang_lichsu_huy"
+        app:layout_constraintBottom_toTopOf="@+id/btn_admin_datlich_huy"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_khachhang_lichsu_tongtien"
+        android:id="@+id/tv_admin_datlich_chitiet_tongtien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rcv_admin_datlich_chitiet"
@@ -74,18 +74,30 @@
         android:textStyle="bold"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_khachang_lichsu_huy"
+        app:layout_constraintBottom_toTopOf="@+id/btn_admin_datlich_huy"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btn_khachang_lichsu_huy"
+        android:id="@+id/btn_admin_datlich_huy"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_btn_google"
         android:text="Hủy đặt lịch"
-        android:layout_marginBottom="15dp"
         app:backgroundTint="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/btn_admin_datlich_thanhtoan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btn_admin_datlich_thanhtoan"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btn_google"
+        android:text="Đã thanh toán"
+        app:backgroundTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="10dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

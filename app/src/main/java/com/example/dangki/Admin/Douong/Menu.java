@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dangki.Admin.San.ThemSan;
+import com.example.dangki.Admin.UserInfo;
 import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.Model.DoUong;
 import com.example.dangki.R;
@@ -41,6 +42,7 @@ public class Menu extends AppCompatActivity {
     DoUongMenuAdapter doUongMenuAdapter;
     FloatingActionButton btn_admin_douong_them;
     List<DoUong> doUongList;
+    String userID;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class Menu extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.admin_douong);
 
-        findViewByIds();
+        FindViewByIds();
         BottomNavigation();
 
         doUongMenuAdapter = new DoUongMenuAdapter(new ArrayList<>());
@@ -59,7 +61,7 @@ public class Menu extends AppCompatActivity {
         btn_admin_douong_them.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ThemSan.class);
+                Intent intent = new Intent(getApplicationContext(), ThemDoUong.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
@@ -171,12 +173,13 @@ public class Menu extends AppCompatActivity {
     /*
     Find View By Id
      */
-    void findViewByIds(){
+    void FindViewByIds(){
         bottomNavigationView = findViewById(R.id.admin_navigation);
         btn_admin_douong_them = findViewById(R.id.btn_themDoUong);
         recyclerView = findViewById(R.id.rcv_admin_douong);
         searchView = findViewById(R.id.search_admin_douong);
 
+        userID = getIntent().getStringExtra("userID");
     }
 
     /*
@@ -189,16 +192,29 @@ public class Menu extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.bottom_admin_douong:
                     return true;
-                case R.id.bottom_admin_datlich:
-                    startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
-                    finish();
-                    return true;
+
                 case R.id.bottom_admin_khachhang:
-                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.KhachHang.Menu.class));
+                    Intent intent = new Intent(getApplicationContext(), com.example.dangki.Admin.KhachHang.Menu.class);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
                     finish();
                     return true;
                 case R.id.bottom_admin_san:
-                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.San.Menu.class));
+                    Intent intent1 = new Intent(getApplicationContext(), com.example.dangki.Admin.San.Menu.class);
+                    intent1.putExtra("userID", userID);
+                    startActivity(intent1);
+                    finish();
+                    return true;
+                case R.id.bottom_admin_profile:
+                    Intent intent2 = new Intent(getApplicationContext(), UserInfo.class);
+                    intent2.putExtra("userID", userID);
+                    startActivity(intent2);
+                    finish();
+                    return true;
+                case R.id.bottom_admin_datlich:
+                    Intent intent3 = new Intent(getApplicationContext(), com.example.dangki.Admin.DatLich.Menu.class);
+                    intent3.putExtra("userID", userID);
+                    startActivity(intent3);
                     finish();
                     return true;
             }

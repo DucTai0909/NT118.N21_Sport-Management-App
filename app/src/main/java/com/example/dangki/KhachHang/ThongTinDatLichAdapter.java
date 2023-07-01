@@ -87,10 +87,15 @@ public class ThongTinDatLichAdapter extends RecyclerView.Adapter<ThongTinDatLich
         public void bind(ThongTinDatLichModel thongTinDatLichModel){
             tv_tensan.setText(thongTinDatLichModel.getName());
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-            String formattedStartDate = dateFormat.format(thongTinDatLichModel.getStart_time());
-            String formattedEndDate = dateFormat.format(thongTinDatLichModel.getEnd_time());
-            tv_giochoi.setText(formattedStartDate + " - " + formattedEndDate);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String formattedStartDate = timeFormat.format(thongTinDatLichModel.getStart_time());
+            String formattedEndDate = timeFormat.format(thongTinDatLichModel.getEnd_time());
+            String dateString = dateFormat.format(thongTinDatLichModel.getEnd_time());
+
+            String gioChoi = formattedStartDate + " - " + formattedEndDate + " " + dateString;
+
+            tv_giochoi.setText(gioChoi);
 
             tv_trangthai.setText(thongTinDatLichModel.getStatus());
 

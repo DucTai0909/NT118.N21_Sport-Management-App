@@ -31,6 +31,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ThemDoUong extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     static final int RESULT_ADD_SUCCESS = 2;
@@ -83,7 +86,13 @@ public class ThemDoUong extends AppCompatActivity {
         double gia_do_uong_db = Double.parseDouble(edt_gia.getText().toString());
         int sl_conlai_db = Integer.parseInt(edt_sl.getText().toString());
 
-        DoUong doUong= new DoUong(ten_douong_db, img_url, gia_do_uong_db, sl_conlai_db, false);
+//        DoUong doUong= new DoUong(ten_douong_db, img_url, gia_do_uong_db, sl_conlai_db, false);
+        Map<String, Object> doUong = new HashMap<>();
+        doUong.put("img_url", img_url);
+        doUong.put("isDelete", false);
+        doUong.put("name", ten_douong_db);
+        doUong.put("remain", sl_conlai_db);
+        doUong.put("price", gia_do_uong_db);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference drinksRef = db.collection("Drink");
         drinksRef.add(doUong).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

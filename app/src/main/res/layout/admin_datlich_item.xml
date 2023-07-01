@@ -4,61 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:id="@+id/ln_khachhang_thanhtoan_item"
+        android:id="@+id/ln_admin_khachhang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
         <ImageView
-            android:id="@+id/imv_khachang_thanhtoan_anh"
+            android:id="@+id/imv_admin_datlich_anhsan"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/sp_pepsi"
-            android:layout_marginLeft="5dp"/>
+            android:src="@drawable/sb5n"
+            android:layout_marginLeft="10dp">
+        </ImageView>
+
         <RelativeLayout
             android:id="@+id/rl_admin_khachhang_fullname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp">
+            android:layout_marginLeft="12dp">
             <TextView
-                android:id="@+id/tv_khachhang_thanhtoan_tendouongSan"
-                android:layout_width="155dp"
+                android:id="@+id/tv_admin_datlich_tensan"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/black"
-                android:text="Pepsi lon 330ml"
+                android:text="San bong 5 nguoi"
                 android:textSize="18dp"/>
 
             <TextView
-                android:id="@+id/tv_khachhang_thanhtoan_slGiochoi"
+                android:id="@+id/tv_admin_datlich_giochoi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SL: 36"
-                android:layout_below="@id/tv_khachhang_thanhtoan_tendouongSan"
-                android:textColor="@color/black"
-                android:layout_marginTop="7dp"/>
-
+                android:text="17:00 - 16:00 21/12/2023"
+                android:textColor="@color/green"
+                android:layout_below="@id/tv_admin_datlich_tensan"
+                android:layout_marginTop="7dp"
+                />
+            <TextView
+                android:id="@+id/tv_admin_datlich_fullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_admin_datlich_giochoi"
+                android:layout_marginTop="7dp"
+                android:text="Nguyễn Tô Đức Tài"
+                android:textColor="@color/black" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_khachhang_thanhtoan_giatien"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:text="12.000"
-            android:textSize="16dp"
-            android:textColor="#ff002a" />
         <ImageView
-            android:id="@+id/btn_khachhang_thanhtoan_xoa"
-            android:layout_marginRight="8dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_trash"
-            android:layout_marginTop="25dp"
-            android:layout_marginStart="5dp"
-            />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:textSize="16dp"
+            android:textColor="#ff002a"
+            android:backgroundTint="#FFFFFF"
+            android:src="@drawable/ic_right_arrow" />
     </LinearLayout>
     <View
         android:id="@+id/divider2"
@@ -67,7 +68,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="7dp"
         android:layout_height="3dp"
-        android:layout_below="@id/ln_khachhang_thanhtoan_item"
+        android:layout_below="@id/ln_admin_khachhang"
         android:layout_weight="1"
         android:background="?android:attr/listDivider" />
 </RelativeLayout>

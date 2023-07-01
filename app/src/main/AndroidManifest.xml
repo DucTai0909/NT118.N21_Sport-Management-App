@@ -79,6 +79,10 @@
 
         <activity android:name=".Admin.KhachHang.CapNhatKhachHang"/>
 
+        <activity android:name=".Admin.DatLich.Menu"/>
+
+        <activity android:name=".Admin.DatLich.ChiTietDatLichAdmin"/>
+
 </application>
 
 </manifest>

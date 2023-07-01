@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dangki.Admin.Douong.CapNhatDoUong;
+import com.example.dangki.Admin.UserInfo;
 import com.example.dangki.Dangnhapthanhcong;
 import com.example.dangki.Model.DoUong;
 import com.example.dangki.Model.San;
@@ -40,6 +41,7 @@ public class Menu extends AppCompatActivity {
     RecyclerView recyclerView;
     List<San> sanList;
     SanAdapter sanAdapter;
+    String userID;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,29 +175,42 @@ public class Menu extends AppCompatActivity {
         btn_themSan = findViewById(R.id.btn_admin_san_them);
         bottomNavigationView = findViewById(R.id.admin_san_navigation);
         recyclerView = findViewById(R.id.rcv_admin_san);
-    }
-    void BottomNavigation(){
 
+        userID = getIntent().getStringExtra("userID");
+    }
+    void BottomNavigation() {
         bottomNavigationView.setSelectedItemId(R.id.bottom_admin_san);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.bottom_admin_san:
                     return true;
-                case R.id.bottom_admin_datlich:
-                    startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                case R.id.bottom_admin_profile:
+                    Intent intent = new Intent(getApplicationContext(), UserInfo.class);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
                     finish();
                     return true;
                 case R.id.bottom_admin_khachhang:
-                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.KhachHang.Menu.class));
+                    Intent intent3 = new Intent(getApplicationContext(), com.example.dangki.Admin.KhachHang.Menu.class);
+                    intent3.putExtra("userID", userID);
+                    startActivity(intent3);
                     finish();
                     return true;
                 case R.id.bottom_admin_douong:
-                    startActivity(new Intent(getApplicationContext(), com.example.dangki.Admin.Douong.Menu.class));
+                    Intent intent1 = new Intent(getApplicationContext(), com.example.dangki.Admin.Douong.Menu.class);
+                    intent1.putExtra("userID", userID);
+                    startActivity(intent1);
+                    finish();
+                    return true;
+                case R.id.bottom_admin_datlich:
+                    Intent intent2 = new Intent(getApplicationContext(), com.example.dangki.Admin.DatLich.Menu.class);
+                    intent2.putExtra("userID", userID);
+                    startActivity(intent2);
                     finish();
                     return true;
             }
             return false;
         });
     }
-
 }

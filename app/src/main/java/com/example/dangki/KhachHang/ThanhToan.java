@@ -30,9 +30,14 @@ import com.example.dangki.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import org.json.JSONObject;
 
@@ -65,7 +70,6 @@ public class ThanhToan extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
         setContentView(R.layout.khachhang_thanhtoan);
-        purchasedServices = new ArrayList<>();
         FindViewByIds();
         SetupAdapter();
 
@@ -119,7 +123,210 @@ public class ThanhToan extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        purchasedServiceAdapter.setOnDeleteItemClickListener(new PurchasedServiceAdapter.OnDeleteItemClickListener() {
+            @Override
+            public void onDeleteItem(PurchasedService purchasedService) {
+                if(purchasedService.getType().equals("Drink")){
+                    XoaDoUong(purchasedService);
+                }else{
+                    int dem =0;
+                    for (int i =0; i<purchasedServices.size(); i++ ){
+                        if(purchasedServices.get(i).getType().equals("Stadium")){
+                            dem +=1;
+                        }
+                    }
+                    if(dem ==1){
+                        HuyDatLich();
+                    }else{
+                        XoaSan(purchasedService);
+                    }
+                }
+            }
+        });
     }
+
+    private void XoaSan(PurchasedService purchasedService) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Xác nhận xóa lịch đặt sân này");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                XoaSanDB(purchasedService);
+            }
+        });
+        builder.setNegativeButton("Hủy", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void XoaSanDB(PurchasedService purchasedService) {
+        progressBar.setVisibility(View.VISIBLE);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Stadium_Rental")
+                .whereEqualTo("rental_id", rentalID)
+                .whereEqualTo("stadium_id", purchasedService.getId())
+                .limit(1)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        db.collection("Stadium_Rental")
+                                .document(documentSnapshot.getId())
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        LoadDanhSach();
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                });
+    }
+
+    private void HuyDatLich() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Hủy đặt lịch");
+        builder.setMessage("Đây là lịch đặt sân cuối cùng, nếu bạn xóa thì đồng nghĩa với hủy đặt lịch" +
+                ". Bạn chắc chắn?");
+        builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                HuyDatLichDB();
+            }
+        });
+        builder.setNegativeButton("Hủy", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void HuyDatLichDB() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        List<Task<?>> tasks = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Cập nhật số lượng đồ uống trong collection "Drink"
+        for (PurchasedService purchasedService : purchasedServices) {
+            if (purchasedService.getType().equals("Drink")) {
+                String drinkID = purchasedService.getId();
+                int quantity = purchasedService.getQuantity();
+
+                // Tăng số lượng đồ uống bằng quantity
+                Task<Void> updateDrinkTask = db.collection("Drink")
+                        .document(drinkID)
+                        .update("remain", FieldValue.increment(quantity));
+                tasks.add(updateDrinkTask);
+            }
+        }
+
+        // Xóa dữ liệu trên các collection "Rental", "Drink_Rental" và "Stadium_Rental"
+        Task<Void> deleteRentalTask = db.collection("Rental")
+                .document(rentalID)
+                .delete();
+        tasks.add(deleteRentalTask);
+
+        Task<Void> drinkRentalQueryTask = db.collection("Drink_Rental")
+                .whereEqualTo("rental_id", rentalID)
+                .get()
+                .continueWithTask(querySnapshotTask -> {
+                    List<Task<Void>> deleteTasks = new ArrayList<>();
+
+                    QuerySnapshot querySnapshot = querySnapshotTask.getResult();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Task<Void> deleteTask = document.getReference().delete();
+                        deleteTasks.add(deleteTask);
+                    }
+
+                    return Tasks.whenAll(deleteTasks);
+                });
+        tasks.add(drinkRentalQueryTask);
+
+        Task<Void> stadiumRentalQueryTask = db.collection("Stadium_Rental")
+                .whereEqualTo("rental_id", rentalID)
+                .get()
+                .continueWithTask(querySnapshotTask -> {
+                    List<Task<Void>> deleteTasks = new ArrayList<>();
+
+                    QuerySnapshot querySnapshot = querySnapshotTask.getResult();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Task<Void> deleteTask = document.getReference().delete();
+                        deleteTasks.add(deleteTask);
+                    }
+
+                    return Tasks.whenAll(deleteTasks);
+                });
+        tasks.add(stadiumRentalQueryTask);
+
+        // ...
+
+        Task<?>[] taskArray = tasks.toArray(new Task[0]);
+
+        // Lắng nghe sự kiện hoàn thành của tất cả các tác vụ
+        Tasks.whenAllComplete(taskArray)
+                .addOnSuccessListener(taskList -> {
+                    // Tất cả các tác vụ đã hoàn thành thành công
+                    progressBar.setVisibility(View.GONE);
+
+                    // Finish Activity hiện tại
+                    Intent intent = new Intent(ThanhToan.this, ChonSan.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    // Xảy ra lỗi trong quá trình thực hiện
+                    // Hiển thị thông báo hoặc xử lý lỗi tùy theo yêu cầu của bạn
+                });
+    }
+
+    private void XoaDoUong(PurchasedService purchasedService) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận xóa");
+        builder.setMessage("Xác nhận xóa khỏi danh sách");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                WriteBatch batch = db.batch();
+                db.collection("Drink_Rental")
+                        .whereEqualTo("rental_id", rentalID)
+                        .whereEqualTo("drink_id", purchasedService.getId())
+                        .limit(1)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                                DocumentReference Drink_Rental = documentSnapshot.getReference();
+                                batch.delete(Drink_Rental);
+
+                                DocumentReference Drink = db.collection("Drink")
+                                        .document(purchasedService.getId());
+                                batch.update(Drink, "remain", FieldValue.increment(purchasedService.getQuantity()));
+
+                                DocumentReference Rental = db.collection("Rental")
+                                        .document(rentalID);
+                                double sub = purchasedService.getQuantity() * purchasedService.getPrice();
+                                batch.update(Rental, "total", FieldValue.increment(-sub));
+
+                                batch.commit()
+                                        .addOnSuccessListener(unused -> {
+                                            progressBar.setVisibility(View.GONE);
+                                            LoadDanhSach();
+                                        });
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("Hủy", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void ThanhToanZalo() {
         CreateOrder orderApi = new CreateOrder();
@@ -190,6 +397,7 @@ public class ThanhToan extends AppCompatActivity {
 
     private void LoadDanhSach() {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+            purchasedServices = new ArrayList<>();
 
             // Lấy thông tin tổng tiền từ collection "Rental"
             db.collection("Rental").document(rentalID)
@@ -278,16 +486,11 @@ public class ThanhToan extends AppCompatActivity {
             // Chờ hoàn thành của cả ba hàm bất đồng bộ
 
     }
-    void ShowPurchasedServices(List<PurchasedService> purchasedServices) {
-        purchasedServiceAdapter = new PurchasedServiceAdapter(purchasedServices);
-        recyclerView.setAdapter(purchasedServiceAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        purchasedServiceAdapter.setPurchasedServiceList(purchasedServices);
-    }
+
 
 
     private void SetupAdapter() {
-        purchasedServiceAdapter = new PurchasedServiceAdapter(purchasedServices);
+        purchasedServiceAdapter = new PurchasedServiceAdapter(new ArrayList<>());
         recyclerView.setAdapter(purchasedServiceAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

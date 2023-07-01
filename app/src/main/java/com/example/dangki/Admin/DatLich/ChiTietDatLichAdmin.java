@@ -1,13 +1,16 @@
-package com.example.dangki.KhachHang;
+package com.example.dangki.Admin.DatLich;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -15,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dangki.KhachHang.ChiTietDatLich;
+import com.example.dangki.KhachHang.PurchasedServiceAdapter;
 import com.example.dangki.Model.PurchasedService;
 import com.example.dangki.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,39 +34,44 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-public class ChiTietDatLich extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    String rentalID, status;
-    TextView tv_tongTien;
+public class ChiTietDatLichAdmin extends AppCompatActivity {
     ImageView btn_goback;
+    TextView tv_tongtien;
+    Button btn_huy, btn_thanhtoan;
+    List<PurchasedService> purchasedServiceList;
     RecyclerView recyclerView;
+    String rentalID, status;
     PurchasedServiceAdapter purchasedServiceAdapter;
     ProgressBar progressBar;
-    List<PurchasedService> purchasedServices;
-    Button btn_huy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        setContentView(R.layout.khachhang_lichsu_chitiet);
+        setContentView(R.layout.admin_datlich_chitiet);
 
         FindViewByIds();
         SetupAdapter();
+        CheckStatus();
         LoadData();
 
-        btn_goback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HuyDatSan();
+            }
+        });
+        btn_thanhtoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UpdateStatus();
             }
         });
 
@@ -72,8 +82,8 @@ public class ChiTietDatLich extends AppCompatActivity {
                     XoaDoUong(purchasedService);
                 }else{
                     int dem =0;
-                    for (int i =0; i<purchasedServices.size(); i++ ){
-                        if(purchasedServices.get(i).getType().equals("Stadium")){
+                    for (int i =0; i<purchasedServiceList.size(); i++ ){
+                        if(purchasedServiceList.get(i).getType().equals("Stadium")){
                             dem +=1;
                         }
                     }
@@ -83,6 +93,12 @@ public class ChiTietDatLich extends AppCompatActivity {
                         XoaSan(purchasedService);
                     }
                 }
+            }
+        });
+        btn_goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -126,6 +142,8 @@ public class ChiTietDatLich extends AppCompatActivity {
                     }
                 });
     }
+
+
     private void XoaDoUong(PurchasedService purchasedService) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Xác nhận xóa");
@@ -133,7 +151,6 @@ public class ChiTietDatLich extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                progressBar.setVisibility(View.VISIBLE);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 WriteBatch batch = db.batch();
                 db.collection("Drink_Rental")
@@ -158,7 +175,6 @@ public class ChiTietDatLich extends AppCompatActivity {
 
                                 batch.commit()
                                         .addOnSuccessListener(unused -> {
-                                            progressBar.setVisibility(View.GONE);
                                             LoadData();
                                         });
                             }
@@ -170,8 +186,38 @@ public class ChiTietDatLich extends AppCompatActivity {
         dialog.show();
     }
 
+
+    private void UpdateStatus() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận thanh toán");
+        builder.setMessage("Xác nhận khách hàng đã thanh toán trực tiếp?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String, Object> updateData = new HashMap<>();
+                updateData.put("status", "Done");
+                db.collection("Rental")
+                        .document(rentalID)
+                        .update(updateData)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                setResult(1);
+                                progressBar.setVisibility(View.GONE);
+                                finish();
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("Hủy", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void HuyDatSan() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChiTietDatLich.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ChiTietDatLichAdmin.this);
         builder.setTitle("Hủy đặt lịch");
         builder.setMessage("Quý khách xác nhận hủy đặt lịch");
         builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
@@ -185,13 +231,12 @@ public class ChiTietDatLich extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void HuyDatSanDB() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<Task<?>> tasks = new ArrayList<>();
 
         // Cập nhật số lượng đồ uống trong collection "Drink"
-        for (PurchasedService purchasedService : purchasedServices) {
+        for (PurchasedService purchasedService : purchasedServiceList) {
             if (purchasedService.getType().equals("Drink")) {
                 String drinkID = purchasedService.getId();
                 int quantity = purchasedService.getQuantity();
@@ -250,7 +295,6 @@ public class ChiTietDatLich extends AppCompatActivity {
         Tasks.whenAllComplete(taskArray)
                 .addOnSuccessListener(taskList -> {
                     // Tất cả các tác vụ đã hoàn thành thành công
-
                     // Finish Activity hiện tại
                     setResult(1);
                     progressBar.setVisibility(View.GONE);
@@ -263,22 +307,24 @@ public class ChiTietDatLich extends AppCompatActivity {
                 });
     }
 
-
-    private void SetupAdapter() {
-        purchasedServiceAdapter = new PurchasedServiceAdapter(new ArrayList<>());
-        purchasedServiceAdapter.setStatus(status);
-        recyclerView.setAdapter(purchasedServiceAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void CheckStatus() {
+        if(status.equals("Done")){
+            btn_huy.setVisibility(View.GONE);
+            btn_thanhtoan.setVisibility(View.GONE);
+        } else if (status.equals("Booking")) {
+            btn_thanhtoan.setVisibility(View.GONE);
+        }
     }
 
     private void LoadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        purchasedServices = new ArrayList<>();
+        purchasedServiceList = new ArrayList<>();
+
         // Lấy thông tin tổng tiền từ collection "Rental"
         db.collection("Rental").document(rentalID)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    tv_tongTien.setText(documentSnapshot.getDouble("total").toString() + "VND");
+                    tv_tongtien.setText(documentSnapshot.getDouble("total").toString() + "VND");
                 });
 
 
@@ -306,8 +352,8 @@ public class ChiTietDatLich extends AppCompatActivity {
                                     PurchasedService purchasedService =
                                             new PurchasedService(drinkID, drinkName, "Drink",
                                                     img_url, drinkPrice, quantity);
-                                    purchasedServices.add(purchasedService);
-                                    purchasedServiceAdapter.setPurchasedServiceList(purchasedServices);
+                                    purchasedServiceList.add(purchasedService);
+                                    purchasedServiceAdapter.setPurchasedServiceList(purchasedServiceList);
 
                                 })
                                 .addOnCompleteListener(task -> {
@@ -344,8 +390,8 @@ public class ChiTietDatLich extends AppCompatActivity {
                                     PurchasedService purchasedService =
                                             new PurchasedService(stadiumID, stadiumName,
                                                     "Stadium", img_url, stadiumPrice, rental_time);
-                                    purchasedServices.add(purchasedService);
-                                    purchasedServiceAdapter.setPurchasedServiceList(purchasedServices);
+                                    purchasedServiceList.add(purchasedService);
+                                    purchasedServiceAdapter.setPurchasedServiceList(purchasedServiceList);
                                 })
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
@@ -357,21 +403,25 @@ public class ChiTietDatLich extends AppCompatActivity {
                     if (stadiumRentalQueryDocumentSnapshots.isEmpty()) {
                     }
                 });
+    }
 
-        // Chờ hoàn thành của cả ba hàm bất đồng bộ
+    private void SetupAdapter() {
+        purchasedServiceAdapter = new PurchasedServiceAdapter(new ArrayList<>());
+        purchasedServiceAdapter.setStatus(status);
+        recyclerView.setAdapter(purchasedServiceAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void FindViewByIds() {
-        recyclerView = findViewById(R.id.rcv_admin_datlich_chitiet);
-        btn_huy = findViewById(R.id.btn_khachang_lichsu_huy);
-        tv_tongTien = findViewById(R.id.tv_khachhang_lichsu_tongtien);
         btn_goback = findViewById(R.id.btn_admin_datlich_chitiet_goback);
-        progressBar = findViewById(R.id.progressBar_khachhang_lichsu);
+        btn_thanhtoan = findViewById(R.id.btn_admin_datlich_thanhtoan);
+        btn_huy = findViewById(R.id.btn_admin_datlich_huy);
+        tv_tongtien = findViewById(R.id.tv_admin_datlich_chitiet_tongtien);
+        recyclerView = findViewById(R.id.rcv_admin_datlich_chitiet);
+        progressBar = findViewById(R.id.progressBar_admin_datlich_chitiet);
 
         rentalID = getIntent().getStringExtra("rentalID");
         status = getIntent().getStringExtra("status");
-        if(status.equals("Done")){
-            btn_huy.setVisibility(View.GONE);
-        }
+
     }
 }

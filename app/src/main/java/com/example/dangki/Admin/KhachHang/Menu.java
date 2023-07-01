@@ -133,7 +133,9 @@ public class Menu extends AppCompatActivity {
                     finish();
                     return true;
                 case R.id.bottom_admin_datlich:
-                    startActivity(new Intent(getApplicationContext(), Dangnhapthanhcong.class));
+                    Intent intent3 = new Intent(getApplicationContext(), com.example.dangki.Admin.DatLich.Menu.class);
+                    intent3.putExtra("userID", userID);
+                    startActivity(intent3);
                     finish();
                     return true;
                 case R.id.bottom_admin_douong:

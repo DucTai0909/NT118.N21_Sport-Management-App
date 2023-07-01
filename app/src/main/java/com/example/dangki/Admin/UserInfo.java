@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,16 +18,28 @@ import com.example.dangki.Admin.KhachHang.Menu;
 import com.example.dangki.KhachHang.ThongTinDatLich;
 import com.example.dangki.KhachHang.ThongTinUser;
 import com.example.dangki.Login;
+import com.example.dangki.Model.User;
 import com.example.dangki.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInfo extends AppCompatActivity {
 
     Button btn_logout;
     String userID;
+    User user;
     BottomNavigationView bottomNavigationView;
+    CircleImageView imv_user;
+    TextView tv_ten, tv_email;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +49,7 @@ public class UserInfo extends AppCompatActivity {
 
         FindViewByIds();
         BottomNavigation();
+        LoadData();
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,6 +82,12 @@ public class UserInfo extends AppCompatActivity {
                     startActivity(intent2);
                     finish();
                     return true;
+                case R.id.bottom_admin_datlich:
+                    Intent intent3= new Intent(getApplicationContext(), com.example.dangki.Admin.DatLich.Menu.class);
+                    intent3.putExtra("userID", userID);
+                    startActivity(intent3);
+                    finish();
+                    return true;
             }
             return false;
         });
@@ -94,6 +114,38 @@ public class UserInfo extends AppCompatActivity {
     private void FindViewByIds() {
         btn_logout = findViewById(R.id.btn_admin_userinfo_logOut);
         bottomNavigationView = findViewById(R.id.bottom_admin_info);
+        tv_ten = findViewById(R.id.tv_admin_info_name);
+        tv_email = findViewById(R.id.tv_admin_info_email);
+        imv_user = findViewById(R.id.imv_admin_info_anh);
         userID = getIntent().getStringExtra("userID");
+    }
+    private void LoadData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User")
+                .document(userID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String name = documentSnapshot.getString("name");
+                        String email = documentSnapshot.getString("email");
+                        String img_url = documentSnapshot.getString("img_url");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String gender = documentSnapshot.getString("gender");
+                        Date birthdate = documentSnapshot.getDate("birthdate");
+                        String password = documentSnapshot.getString("password");
+                        String role_id = documentSnapshot.getString("role_id");
+
+                        user = new User(userID, name, phoneNumber, gender, email, img_url, password,
+                                role_id, birthdate);
+
+                        tv_ten.setText(name);
+                        tv_email.setText(email);
+
+                        if(!img_url.isEmpty()){
+                            Picasso.get().load(img_url).into(imv_user);
+                        }
+                    }
+                });
     }
 }
