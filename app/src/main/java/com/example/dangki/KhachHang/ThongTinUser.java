@@ -31,6 +31,7 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ThongTinUser extends AppCompatActivity {
+    static int REQUEST_CODE_CAPNHAT = 1;
     Button btn_logout;
     BottomNavigationView bottomNavigationView;
     String userID;
@@ -102,9 +103,19 @@ public class ThongTinUser extends AppCompatActivity {
         btn_chinhsua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DangPhatTrien();
+                Intent intent = new Intent(getApplicationContext(), CapNhatThongTinUser.class);
+                intent.putExtra("userID", userID);
+                startActivityForResult(intent, REQUEST_CODE_CAPNHAT);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_CAPNHAT && resultCode == 1){
+            LoadData();
+        }
     }
 
     private void DangPhatTrien() {

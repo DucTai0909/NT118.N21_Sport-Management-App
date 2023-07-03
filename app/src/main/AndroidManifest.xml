@@ -83,6 +83,8 @@
 
         <activity android:name=".Admin.DatLich.ChiTietDatLichAdmin"/>
 
+        <activity android:name=".KhachHang.CapNhatThongTinUser"/>
+
 </application>
 
 </manifest>

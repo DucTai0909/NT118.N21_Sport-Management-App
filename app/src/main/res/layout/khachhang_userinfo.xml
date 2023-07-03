@@ -75,14 +75,7 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_khachhang_userinfo_FullName"
                 app:layout_constraintTop_toBottomOf="@+id/tv_khachhang_userinfo_FullName" />
 
-            <ImageView
-                android:id="@+id/iv_camera"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imv_khachhang_userinfo"
-                app:layout_constraintEnd_toEndOf="@+id/imv_khachhang_userinfo"
-                app:layout_constraintStart_toStartOf="@+id/imv_khachhang_userinfo"
-                app:srcCompat="@drawable/ic_camera" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
