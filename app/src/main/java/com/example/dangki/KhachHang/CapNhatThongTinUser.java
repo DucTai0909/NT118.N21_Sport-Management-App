@@ -196,7 +196,7 @@ public class CapNhatThongTinUser extends AppCompatActivity {
                             String birthDateString = dateFormat.format(birthDate);
                             edt_birthdate.setHint(birthDateString);
                         }
-                        if(img_url_db != null){
+                        if(img_url_db != null && !img_url_db.isEmpty()){
                             Picasso.get().load(img_url_db).into(imv_user);
                             imv_user.setTag((img_url_db));
                         }
